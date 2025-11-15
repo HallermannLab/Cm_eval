@@ -602,7 +602,7 @@ class Pulsed(TreeNode):
             
         TreeNode.__init__(self, fh, self)
 
-
+"""
 class Data(object):
     def __init__(self, bundle, offset=0, size=None):
         self.bundle = bundle
@@ -620,6 +620,70 @@ class Data(object):
         data = np.fromfile(fh, count=trace.DataPoints, dtype=dtype)
         #return data * trace.DataScaler + trace.ZeroData
         return data * trace.DataScaler # removed ZeroData addition (SH) because this addition increased the voltage values by about a factor of 2.
+"""
+class Data(object):
+    def __init__(self, bundle, offset=0, size=None):
+        self.bundle = bundle
+        self.offset = offset
+
+    def __getitem__(self, *args):
+        index = args[0]
+        assert len(index) == 4
+        pul = self.bundle.pul
+        trace = pul[index[0]][index[1]][index[2]][index[3]]
+
+        # file handle
+        fh = open(self.bundle.file_name, 'rb')
+        try:
+            # Seek to data location (byte offset stored in trace.Data)
+            fh.seek(trace.Data)
+
+            # DataFormat is stored as a single byte (type 'c'); convert to int code
+            fmt_code = bytearray(trace.DataFormat)[0]
+
+            # Map HEKA DataFormat code -> numpy dtype (with explicit endianness)
+            # Common codes:
+            #   0 -> 16-bit integer (signed) (historical)
+            #   1 -> 32-bit integer (signed)    (rare)
+            #   2 -> 32-bit float (IEEE single)
+            #   3 -> 64-bit float (IEEE double) (rare)
+            # Adjust/extend mapping if you have other codes in your files.
+            endian = pul.endian  # '<' or '>'
+            np_endian = '<' if endian == '<' else '>'
+            mapping = {
+                0: np_endian + 'i2',   # int16
+                1: np_endian + 'i4',   # int32
+                2: np_endian + 'f4',   # float32
+                3: np_endian + 'f8',   # float64
+            }
+
+            if fmt_code not in mapping:
+                # fallback: assume float32 (safer for traces that look like floats)
+                dtype = np.dtype(np_endian + 'f4')
+            else:
+                dtype = np.dtype(mapping[fmt_code])
+
+            # number of samples
+            npoints = int(trace.DataPoints)
+
+            # read exactly npoints * itemsize bytes
+            itemsize = dtype.itemsize
+            nbytes = npoints * itemsize
+            raw = fh.read(nbytes)
+            if len(raw) < nbytes:
+                # file truncated or pointer wrong — raise to help debugging
+                raise IOError(f"Expected {nbytes} bytes for data, got {len(raw)} bytes.")
+
+            # interpret bytes as numpy array
+            data = np.frombuffer(raw, dtype=dtype).copy()  # copy to own memory
+
+            # Apply scaling and offset: (value * DataScaler) + ZeroData
+            # Note: some codebases previously omitted ZeroData — if you see systematic offset/scale
+            # issues, try removing + trace.ZeroData or inspect trace.DataScaler/trace.ZeroData values.
+            return data * trace.DataScaler # + trace.ZeroData
+
+        finally:
+            fh.close()
 
 
 class Bundle(object):
