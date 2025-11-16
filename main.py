@@ -276,6 +276,32 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         axs[axs_start_idx + 3].set_xlabel("Time (s)")
         axs[axs_start_idx + 3].set_ylabel("pF")
 
+        # ------------------------  Current trace (5th plot)  -----------------------------------
+        # Plot current trace from t0-0.002 to t1+0.002
+        if t0 is not None and t1 is not None:
+            current_plot_start = t0 - 0.002
+            current_plot_end = t1 + 0.002
+            current_mask = (i_trace_time >= current_plot_start) & (i_trace_time <= current_plot_end)
+
+            if np.any(current_mask):
+                axs[axs_start_idx + 4].plot(i_trace_time[current_mask], i_trace[current_mask], 'c-', linewidth=1,
+                                            label="Current")
+                axs[axs_start_idx + 4].axvline(x=t0, color='r', linestyle='--', alpha=0.7, label="t0")
+                axs[axs_start_idx + 4].axvline(x=t1, color='g', linestyle='--', alpha=0.7, label="t1")
+                axs[axs_start_idx + 4].set_title("Current Trace")
+                axs[axs_start_idx + 4].legend()
+                axs[axs_start_idx + 4].set_xlabel("Time (s)")
+                axs[axs_start_idx + 4].set_ylabel("Current (pA)")
+                axs[axs_start_idx + 4].grid(True, alpha=0.3)
+            else:
+                axs[axs_start_idx + 4].text(0.5, 0.5, "No current data\nin time window",
+                                            ha='center', va='center', transform=axs[axs_start_idx + 4].transAxes)
+                axs[axs_start_idx + 4].set_title("Current Trace - No Data")
+        else:
+            axs[axs_start_idx + 4].text(0.5, 0.5, "t0 or t1 not found",
+                                        ha='center', va='center', transform=axs[axs_start_idx + 4].transAxes)
+            axs[axs_start_idx + 4].set_title("Current Trace - No Timing")
+
         # Store results
         results = {
             f'{trace_name}_baseline': baseline,
@@ -596,7 +622,7 @@ def Cm_eval():
             continue
 
         group_id = 0
-        fig, axs = plt.subplots(5, 4, figsize=(20, 25))  # Now 5 rows for 5 trace types
+        fig, axs = plt.subplots(5, 5, figsize=(25, 25))  # Now 5 rows for 5 trace types
         axs = axs.flatten()
 
         # Initialize result dictionary for this cell
@@ -620,7 +646,7 @@ def Cm_eval():
                 print(f"        Analyzing {trace_type}")
 
                 # Calculate subplot indices (4 plots per row)
-                axs_start_idx = trace_idx * 4
+                axs_start_idx = trace_idx * 5
 
                 # Analyze this trace
                 trace_results = analyze_trace(bundle, group_id, series_id, trace_type, axs_start_idx, axs, file_name)
@@ -649,8 +675,8 @@ def Cm_eval():
             else:
                 print(f"        Skipping {trace_type}")
                 # Mark skipped plots
-                axs_start_idx = trace_idx * 4
-                for i in range(4):
+                axs_start_idx = trace_idx * 5
+                for i in range(5):
                     axs[axs_start_idx + i].set_title(f"SKIPPED - {trace_type}")
                     axs[axs_start_idx + i].grid(True)
 
