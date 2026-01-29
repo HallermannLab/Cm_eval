@@ -342,6 +342,104 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
 
     return results
 
+def analyze_aps_trace(cm_trace, time, axs, axs_start_idx, trace_name):
+    """
+    aps analysis: baseline subtraction, median filter, fits.
+    Uses same conventions as analyze_trace but WITHOUT voltage-based timing
+    """
+
+    # ---------- baseline window (first 10–90%) ----------
+    t0 = time[0]
+    t1 = time[int(0.2 * len(time))]
+
+    baseline_mask = (time >= t0) & (time <= t1)
+    baseline_time = time[baseline_mask]
+    baseline_values = cm_trace[baseline_mask]
+
+    baseline = baseline_values.mean()
+    coeffs = np.polyfit(baseline_time, baseline_values, deg=1)
+    baseline_fit_line = np.polyval(coeffs, time)
+
+    cm_bs = cm_trace - baseline_fit_line
+    cm_bs = median_filter(cm_bs, size=window_size_for_median_rolling_filter)
+
+    time_rel = time - time[0]
+
+    # ---------- column 1 ----------
+    axs[axs_start_idx].plot(time, cm_trace, label="Raw")
+    axs[axs_start_idx].plot(time, baseline_fit_line, '--', label="Baseline")
+    axs[axs_start_idx].set_title(trace_name)
+    axs[axs_start_idx].set_ylabel("pF")
+    axs[axs_start_idx].legend()
+
+    # ---------- fits ----------
+    fit_mask = time_rel >= 0.0
+
+    # --- 1exp ---
+    try:
+        popt, _ = curve_fit(
+            exp_func,
+            time_rel[fit_mask],
+            cm_bs[fit_mask],
+            p0=(np.max(cm_bs), 5),
+            bounds=([0, 0], [np.inf, np.inf])
+        )
+        A1, tau1 = popt
+        fit1 = A1 * np.exp(-time_rel / tau1)
+    except:
+        fit1 = np.zeros_like(cm_bs)
+
+    axs[axs_start_idx + 1].plot(time_rel, cm_bs)
+    axs[axs_start_idx + 1].plot(time_rel, fit1, 'r--')
+    axs[axs_start_idx + 1].set_title("1-exp")
+
+    # --- 1expY ---
+    try:
+        popt, _ = curve_fit(
+            exp_funcY,
+            time_rel[fit_mask],
+            cm_bs[fit_mask],
+            p0=(np.max(cm_bs), 5, np.min(cm_bs))
+        )
+        A2, tau2, y0 = popt
+        fit2 = A2 * np.exp(-time_rel / tau2) + y0
+    except:
+        fit2 = np.zeros_like(cm_bs)
+
+    axs[axs_start_idx + 2].plot(time_rel, cm_bs)
+    axs[axs_start_idx + 2].plot(time_rel, fit2, 'g--')
+    axs[axs_start_idx + 2].set_title("1-expY")
+
+    # --- 2exp ---
+    try:
+        popt, _ = curve_fit(
+            exp_func2,
+            time_rel[fit_mask],
+            cm_bs[fit_mask],
+            p0=(np.max(cm_bs), 5, 0.5, 50),
+            bounds=([0, 0, 0, 0], [np.inf, np.inf, 1, np.inf])
+        )
+        A, tau_fast, aRel, tau_slow = popt
+        fit3 = (
+            A * (1 - aRel) * np.exp(-time_rel / tau_fast)
+            + A * aRel * np.exp(-time_rel / tau_slow)
+        )
+    except:
+        fit3 = np.zeros_like(cm_bs)
+
+    axs[axs_start_idx + 3].plot(time_rel, cm_bs)
+    axs[axs_start_idx + 3].plot(time_rel, fit3, 'm--')
+    axs[axs_start_idx + 3].set_title("2-exp")
+
+    # ---------- column 5 (current placeholder) ----------
+    axs[axs_start_idx + 4].text(
+        0.5, 0.5,
+        "Current\n(leak subtraction later)",
+        ha="center", va="center",
+        transform=axs[axs_start_idx + 4].transAxes
+    )
+    axs[axs_start_idx + 4].set_title("Current")
+
 
 def plot_combined_group_analysis(all_traces, group_traces, all_time_arrays, group_time_arrays,
                                  trace_types, unique_groups, output_folder_results):
