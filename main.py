@@ -813,11 +813,110 @@ def Cm_eval():
         # Store results for this cell
         results.append(cell_results)
 
-        # --- Save PDFs for each individual cell ---
-        plt.figure(fig.number)
-        plt.tight_layout()
-        plt.savefig(os.path.join(output_folder_individual_experiments, f"{1 + cell_count:03d}_{file_name}.pdf"))
-        plt.close(fig)
+        # ======================================================================================
+        # --- Load aps traces ---
+        # ======================================================================================
+
+        aps_traces_cell = []
+        aps_time_cell = []
+
+        for aps_col in aps_series_columns:
+
+            if aps_col not in metadata_df.columns:
+                continue
+
+            if not is_valid_series(row.get(aps_col, np.nan)):
+                continue
+
+            aps_series_id = int(float(row[aps_col])) - 1
+            trace_id = 2
+
+            try:
+                cm_trace = F_to_pF * bundle.data[group_id, aps_series_id, 0, trace_id]
+                sampling_interval = bundle.pul[group_id][aps_series_id][0][trace_id].XInterval
+                time = np.arange(len(cm_trace)) * sampling_interval
+
+                valid_mask = ~np.isnan(cm_trace)
+                aps_traces_cell.append(cm_trace[valid_mask])
+                aps_time_cell.append(time[valid_mask])
+
+            except Exception as e:
+                print(f"        Error loading {aps_col} for {file_name}: {e}")
+
+
+        # ======================================================================================
+        # --- Load apsl traces (apsl = P/4 traces for leak substraction) ---
+        # ======================================================================================
+
+        apsl_traces_cell = defaultdict(list)  # key: aps_index (0–4), value: list of 4 traces
+        apsl_time_cell = defaultdict(list)
+
+        for aps_idx, apsl_cols in apsl_series_columns.items():
+
+            for apsl_col in apsl_cols:
+
+                if apsl_col not in metadata_df.columns:
+                    continue
+
+                if not is_valid_series(row.get(apsl_col, np.nan)):
+                    continue
+
+                apsl_series_id = int(float(row[apsl_col])) - 1
+                trace_id = 2  # current trace
+
+                try:
+                    cm_trace = F_to_pF * bundle.data[group_id, apsl_series_id, 0, trace_id]
+                    sampling_interval = bundle.pul[group_id][apsl_series_id][0][trace_id].XInterval
+                    time = np.arange(len(cm_trace)) * sampling_interval
+
+                    valid_mask = ~np.isnan(cm_trace)
+
+                    apsl_traces_cell[aps_idx].append(cm_trace[valid_mask])
+                    apsl_time_cell[aps_idx].append(time[valid_mask])
+
+                except Exception as e:
+                    print(f"        Error loading {apsl_col} for {file_name}: {e}")
+
+
+        for aps_idx in range(5):
+            n = len(apsl_traces_cell.get(aps_idx, []))
+            if n != 4:
+                print(f"        WARNING: APS {aps_idx + 1} has {n}/4 apsl traces")
+
+        # ======================================================================================
+        # --- Compute APS average trace (row 6) ---
+        # ======================================================================================
+
+        aps_avg_trace = None
+        aps_avg_time = None
+
+        if len(aps_traces_cell) > 0:
+            min_len = min(len(t) for t in aps_traces_cell)
+
+            aps_traces_trimmed = np.array([
+                trace[:min_len] for trace in aps_traces_cell
+            ])
+
+            aps_avg_trace = np.mean(aps_traces_trimmed, axis=0)
+            aps_avg_time = aps_time_cell[0][:min_len]
+
+        # ======================================================================================
+        # --- SAVE PER-CELL PDF WITH 2 PAGES (CME + APS) ---
+        # ======================================================================================
+
+        pdf_path = os.path.join(
+            output_folder_individual_experiments,
+            f"{file_name.replace('.dat', '')}.pdf"
+        )
+
+        with PdfPages(pdf_path) as pdf:
+
+            # =======================
+            # PAGE 1 — CME analysis
+            # =======================
+            plt.tight_layout()
+            pdf.savefig(fig)
+            plt.close(fig)
 
     # ==========================================================================================
     # --- Group Analysis After the Loop ---
