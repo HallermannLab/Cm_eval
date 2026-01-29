@@ -3,7 +3,7 @@ try:
 except ImportError:
     print(
         "\nERROR: 'config.py' not found.\n"
-        "Please create a local 'config.py' by copying 'config_template.py' and "
+        "Please create a local 'config.py' by copying 'config.py' and "
         "adjusting the paths for your system.\n"
     )
     raise SystemExit(1)
@@ -16,6 +16,8 @@ import pandas as pd
 import json
 from scipy.signal import savgol_filter
 
+pg.setConfigOption('background', 'w')  # white background
+pg.setConfigOption('foreground', 'k')  # black labels
 
 V_to_mV = 1e3
 sg_polyorder = 3
@@ -274,7 +276,7 @@ def replot():
             second_deriv_plot.setLabel('left', 'd²V/dt² (V/s²)')
 
             # Plot the main voltage trace
-            voltage_plot.plot(time, data, pen='w', name='Voltage')
+            voltage_plot.plot(time, data, pen='m', name='Voltage')
 
             trace_data = analysis_points[file_name][group_key][series_key][sweep_key][trace_key]
 
@@ -305,9 +307,9 @@ def replot():
 
             # Plot derivatives
             first_deriv_plot.plot(time, d1, pen='blue', name='1st Derivative (raw)')
-            first_deriv_plot.plot(time, d1_in_V_per_s, pen='w', name='1st Derivative (filtered)')
+            first_deriv_plot.plot(time, d1_in_V_per_s, pen='k', name='1st Derivative (filtered)')
             second_deriv_plot.plot(time, d2, pen='blue', name='2nd Derivative (raw)')
-            second_deriv_plot.plot(time, d2_in_V_per_s_s, pen='w', name='2nd Derivative (filtered)')
+            second_deriv_plot.plot(time, d2_in_V_per_s_s, pen='k', name='2nd Derivative (filtered)')
 
             points = trace_data
             # Plot each type of point with different symbols and colors
@@ -385,7 +387,7 @@ def replot():
             voltage_plot.setLabel('left', trace.Label, units=trace.YUnit)
 
             # Plot the main voltage trace
-            voltage_plot.plot(time, data, pen='w', name='Trace')
+            voltage_plot.plot(time, data, pen='k', name='Trace')
 
 
 tree.itemSelectionChanged.connect(replot)

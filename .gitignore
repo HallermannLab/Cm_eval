@@ -14,6 +14,6 @@ __pycache__/
 # Ignore OS-specific files
 .DS_Store
 
-# Ignore local config which should contain the data as in config_template.py
+# Ignore local config which should contain the data as in config.py
 config.py
 

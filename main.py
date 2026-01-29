@@ -3,7 +3,7 @@ try:
 except ImportError:
     print(
         "\nERROR: 'config.py' not found.\n"
-        "Please create a local 'config.py' by copying 'config_template.py' and "
+        "Please create a local 'config.py' by copying 'config.py' and "
         "adjusting the paths for your system.\n"
     )
     raise SystemExit(1)
@@ -18,6 +18,7 @@ from scipy.optimize import curve_fit
 from scipy.ndimage import median_filter
 import heka_reader
 import git_save as myGit
+from matplotlib.backends.backend_pdf import PdfPages
 from collections import defaultdict
 import json
 from statistics import median
@@ -27,8 +28,11 @@ from statistics import median
 A_to_pA = 1e12
 V_to_mV = 1e3
 F_to_pF = 1e12
-window_size_for_median_rolling_filter = 11  # must be odd
 
+window_size_for_median_rolling_filter = 11  # must be odd (for symmetric filtering)
+
+# --- unified PDF page size (used for all pages) ---
+PDF_FIGSIZE = (25, 5 * 6)  # 6 trace types → must match page 1
 
 def exp_func(t, A, tau):
     return A * np.exp(-t / tau)
@@ -724,10 +728,6 @@ def Cm_eval():
     # --- Results Storage ---
     results = []
 
-    # Create figure for average traces (now 5 trace types)
-    fig_avg, axs_avg = plt.subplots(5, 3, figsize=(15, 25))
-    axs_avg = axs_avg.flatten()
-
     # --- Process Each Cell ---
     for cell_count, row in metadata_df.iterrows():
         file_name = row['file_name']
@@ -740,9 +740,16 @@ def Cm_eval():
             print(f"Error reading {file_name}: {e}")
             continue
 
-        group_id = 0
-        fig, axs = plt.subplots(5, 5, figsize=(25, 25))  # Now 5 rows for 5 trace types
+        # --- Create new figure 1 for this cell (with CME data) ---
+        n_trace_types = len(trace_types)
+        fig, axs = plt.subplots(
+            n_trace_types,
+            5,
+            figsize=(25, 5 * n_trace_types)
+        )
         axs = axs.flatten()
+
+        group_id = 0
 
         # Initialize result dictionary for this cell
         cell_results = {
@@ -751,66 +758,54 @@ def Cm_eval():
         }
 
         # ==========================================================================================
-        # --- Analyze all trace types ---
+        # --- Analyze trace types ---
         # ==========================================================================================
 
         for trace_idx, trace_type in enumerate(trace_types):
             series_column = f'{trace_type}_series'
 
-            # Check if this trace type is available for this cell
             trace_available = is_valid_series(row.get(series_column, np.nan))
 
+            axs_start_idx = trace_idx * 5
+
             if trace_available:
-                series_id = int(float(row[series_column])) - 1  # Convert to 0-based index
+                series_id = int(float(row[series_column])) - 1
                 print(f"        Analyzing {trace_type}")
 
-                # Calculate subplot indices (4 plots per row)
-                axs_start_idx = trace_idx * 5
+                trace_results = analyze_trace(
+                    bundle, group_id, series_id,
+                    trace_type, axs_start_idx, axs, file_name
+                )
 
-                # Analyze this trace
-                trace_results = analyze_trace(bundle, group_id, series_id, trace_type, axs_start_idx, axs, file_name)
+                cell_results.update({
+                    k: v for k, v in trace_results.items()
+                    if k not in ['cm_trace_baseline_subtracted', 'time_relative']
+                })
 
-                # Add trace results to cell results
-                cell_results.update({k: v for k, v in trace_results.items()
-                                     if k not in ['cm_trace_baseline_subtracted', 'time_relative']})
-
-                # --- Collect traces for group analysis ---
                 if trace_results['cm_trace_baseline_subtracted'] is not None:
-                    # Ensure traces are proper numpy arrays with consistent dtype
-                    cm_trace_clean = np.asarray(trace_results['cm_trace_baseline_subtracted'], dtype=np.float64)
-                    time_relative_clean = np.asarray(trace_results['time_relative'], dtype=np.float64)
+                    all_traces[trace_type].append(
+                        np.asarray(trace_results['cm_trace_baseline_subtracted'], dtype=float)
+                    )
+                    all_time_relative[trace_type].append(
+                        np.asarray(trace_results['time_relative'], dtype=float)
+                    )
 
-                    # Store trace for all cells
-                    all_traces[trace_type].append(cm_trace_clean)
-                    all_time_relative[trace_type].append(time_relative_clean)
-
-                    # Store trace by group if group information is available
                     if 'groups' in metadata_df.columns and pd.notna(row['groups']):
                         cell_group = str(row['groups'])
                         if cell_group in group_traces[trace_type]:
-                            group_traces[trace_type][cell_group].append(cm_trace_clean)
-                            group_time_relative[trace_type][cell_group].append(time_relative_clean)
+                            group_traces[trace_type][cell_group].append(
+                                trace_results['cm_trace_baseline_subtracted']
+                            )
+                            group_time_relative[trace_type][cell_group].append(
+                                trace_results['time_relative']
+                            )
 
             else:
                 print(f"        Skipping {trace_type}")
-                # Mark skipped plots
-                axs_start_idx = trace_idx * 5
                 for i in range(5):
                     axs[axs_start_idx + i].set_title(f"SKIPPED - {trace_type}")
                     axs[axs_start_idx + i].grid(True)
 
-                # Initialize NaN values for skipped analysis
-                nan_keys = [
-                    f'{trace_type}_baseline', f'{trace_type}_ca_ss', f'{trace_type}_ca_tail',
-                    f'{trace_type}_1exp_A', f'{trace_type}_1exp_tau',
-                    f'{trace_type}_1expY_A', f'{trace_type}_1expY_tau', f'{trace_type}_1expY_y0',
-                    f'{trace_type}_2exp_A', f'{trace_type}_2exp_tau1', f'{trace_type}_2exp_aRel',
-                    f'{trace_type}_2exp_tau2'
-                ]
-                for key in nan_keys:
-                    cell_results[key] = np.nan
-
-        # Store results for this cell
         results.append(cell_results)
 
         # ======================================================================================
@@ -984,18 +979,21 @@ def Cm_eval():
     # ==========================================================================================
     # --- Group Analysis After the Loop ---
     # ==========================================================================================
-    # Generate combined plots with 3 subplots per trace type
-    plot_combined_group_analysis(all_traces, group_traces, all_time_relative, group_time_relative,
-                                trace_types, unique_groups, output_folder_results)
+
+    plot_combined_group_analysis(
+        all_traces, group_traces,
+        all_time_relative, group_time_relative,
+        trace_types, unique_groups,
+        output_folder_results
+    )
 
     # ==========================================================================================
     # --- Save all results to Excel ---
     # ==========================================================================================
-    # results EXCEL file
+
     results_df = pd.DataFrame(results)
     excel_output_path = os.path.join(output_folder_results, "results.xlsx")
     results_df.to_excel(excel_output_path, index=False)
-
 
 def start_browser():
     # Import and start the browser
