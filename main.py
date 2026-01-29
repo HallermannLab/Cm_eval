@@ -458,8 +458,13 @@ def plot_combined_group_analysis(all_traces, group_traces, all_time_arrays, grou
     for group_name in groups_to_process:
         print(f"Creating combined analysis for group: {group_name}")
 
-        # Create figure with 5 rows (trace types) × 3 columns (plot types)
-        fig, axes = plt.subplots(5, 3, figsize=(18, 30))
+        # Create figure with DYNAMIC rows (trace types) × 3 columns (plot types)
+        n_trace_types = len(trace_types)
+        fig, axes = plt.subplots(
+            n_trace_types,
+            3,
+            figsize=(18, 5 * n_trace_types)
+        )
         fig.suptitle(f"Combined Analysis - {group_name.title()}", fontsize=16)
 
         for trace_idx, trace_type in enumerate(trace_types):
