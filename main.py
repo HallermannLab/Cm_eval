@@ -918,6 +918,69 @@ def Cm_eval():
             pdf.savefig(fig)
             plt.close(fig)
 
+            # =======================
+            # PAGE 2 — APS analysis
+            # =======================
+
+            fig_aps, axs_aps = plt.subplots(
+                6, 5,
+                figsize=PDF_FIGSIZE,
+                sharex=False
+            )
+
+            axs_aps = axs_aps.flatten()
+
+            # --- individual APS (rows 0–4) ---
+            for i in range(min(5, len(aps_traces_cell))):
+                analyze_aps_trace(
+                    cm_trace=aps_traces_cell[i],
+                    time=aps_time_cell[i],
+                    axs=axs_aps,
+                    axs_start_idx=i * 5,
+                    trace_name=f"APS {i + 1}"
+                )
+
+            # --- mark missing individual APS rows ---
+            for i in range(len(aps_traces_cell), 5):
+                for col in range(5):
+                    ax = axs_aps[i * 5 + col]
+                    ax.text(
+                        0.5, 0.5, "APS not available",
+                        ha="center", va="center",
+                        transform=ax.transAxes
+                    )
+                    ax.set_axis_off()
+
+            # --- APS average (row 5) ---
+            if aps_avg_trace is not None:
+                analyze_aps_trace(
+                    cm_trace=aps_avg_trace,
+                    time=aps_avg_time,
+                    axs=axs_aps,
+                    axs_start_idx=5 * 5,
+                    trace_name="APS average"
+                )
+
+                for col in range(5):
+                    ax = axs_aps[5 * 5 + col]
+                    for line in ax.get_lines():
+                        line.set_color("red")
+            else:
+                for col in range(5):
+                    ax = axs_aps[5 * 5 + col]
+                    ax.text(
+                        0.5, 0.5, "APS not available",
+                        ha="center", va="center",
+                        transform=ax.transAxes
+                    )
+                    ax.set_axis_off()
+
+            plt.tight_layout()
+            pdf.savefig(fig_aps)
+            plt.close(fig_aps)
+
+        print(f"Saved 2-page PDF: {pdf_path}")
+
     # ==========================================================================================
     # --- Group Analysis After the Loop ---
     # ==========================================================================================
