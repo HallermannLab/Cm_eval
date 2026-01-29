@@ -693,7 +693,23 @@ def Cm_eval():
         unique_groups = []
 
     # Initialize storage for traces by groups for each trace type
-    trace_types = ['snapshot_3ms_1', 'snapshot_30ms_1', 'sine_3ms_1', 'snapshot_3ms_2', 'snapshot_30ms_2']
+    trace_types = ['snapshot_3ms_1', 'snapshot_30ms_1', 'sine_3ms_1', 'snapshot_3ms_2', 'snapshot_30ms_2', 'sine_3ms_2']
+
+    aps_series_columns = [
+        'aps_1_series',
+        'aps_2_series',
+        'aps_3_series',
+        'aps_4_series',
+        'aps_5_series'
+    ]
+
+    apsl_series_columns = {
+        0: ['apsl_1_1_series', 'apsl_1_2_series', 'apsl_1_3_series', 'apsl_1_4_series'],
+        1: ['apsl_2_1_series', 'apsl_2_2_series', 'apsl_2_3_series', 'apsl_2_4_series'],
+        2: ['apsl_3_1_series', 'apsl_3_2_series', 'apsl_3_3_series', 'apsl_3_4_series'],
+        3: ['apsl_4_1_series', 'apsl_4_2_series', 'apsl_4_3_series', 'apsl_4_4_series'],
+        4: ['apsl_5_1_series', 'apsl_5_2_series', 'apsl_5_3_series', 'apsl_5_4_series'],
+    }
 
     all_traces = {trace_type: [] for trace_type in trace_types}
     group_traces = {trace_type: {group: [] for group in unique_groups} for trace_type in trace_types}
