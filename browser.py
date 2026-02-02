@@ -66,8 +66,8 @@ voltage_plot.addLegend()
 voltage_plot.showGrid(x=True, y=True)
 
 # Initialize derivative plots as None (will be created dynamically)
-first_deriv_plot = None
-second_deriv_plot = None
+first_deriv_plot = None #change name later bc its not the deriv anymore! (but keep now for simplicity)
+second_deriv_plot = None #keep the structure, maybe I will need it in some time
 
 hsplit.addWidget(plot_widget)
 
