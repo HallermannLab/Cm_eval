@@ -319,30 +319,14 @@ def replot():
                     name="1-exp"
                 )
 
-            d1_symbols = {
-                'threshold_v1': ('o', 'red', 'Threshold')
-            }
-
-            d2_symbols = {
-                'd2_threshold': ('o', 'brown', 'Threshold_2nd'),
-                'd2_peak1': ('t', 'purple', 'Peak1 (Left)'),
-                'd2_peak2': ('d', 'yellow', 'Peak2 (Right)')
-            }
-
-            # Plot points on voltage plot
-            for point_type, (symbol, color, label) in voltage_symbols.items():
-                if points.get(point_type):  # If we have points of this type
-                    t_points, v_points = zip(*points[point_type])
-                    scatter = pg.ScatterPlotItem(
-                        x=t_points,
-                        y=v_points,
-                        symbol=symbol,
-                        size=10,
-                        pen=pg.mkPen(None),
-                        brush=pg.mkBrush(color),
-                        name=label
-                    )
-                    voltage_plot.addItem(scatter)
+            # 1-expY fit
+            if "cm_1expY" in proc and len(proc["cm_1expY"]) > 2:
+                x, y = zip(*proc["cm_1expY"])
+                first_deriv_plot.plot(
+                    x, y,
+                    pen=pg.mkPen('g', width=2),
+                    name="1-expY"
+                )
 
             # Plot points on first derivative plot
             for point_type, (symbol, color, label) in d1_symbols.items():
