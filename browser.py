@@ -358,7 +358,7 @@ def replot():
 
             # Set labels for voltage plot only
             voltage_plot.setLabel('bottom', trace.XUnit)
-            voltage_plot.setLabel('left', trace.Label, units=trace.YUnit)
+            voltage_plot.setLabel('left', 'Capacitance', units='pF')
 
             # Plot the main voltage trace
             voltage_plot.plot(time, data, pen='k', name='Trace')
