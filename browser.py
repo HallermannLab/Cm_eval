@@ -112,7 +112,7 @@ def setup_plots_with_derivatives():
 
     # Link x-axes for synchronized scrolling
     first_deriv_plot.setXLink(voltage_plot)
-    second_deriv_plot.setXLink(voltage_plot)
+
 
 
 def setup_plots_voltage_only():
