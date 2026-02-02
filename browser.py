@@ -289,7 +289,13 @@ def replot():
             # Plot the main voltage trace
             voltage_plot.plot(time, data, pen='m', name='Voltage')
 
-            trace_data = analysis_points[file_name][group_key][series_key][sweep_key][trace_key]
+            # Top plot: Raw Cm data (pF)
+            voltage_plot.plot(
+                time,
+                data,
+                pen='m',
+                name='Raw Cm'
+            )
 
             # Get the filter_cut_off from analysis_points, with fallback
             smooth_window = trace_data.get('smooth_window', 0.01)
