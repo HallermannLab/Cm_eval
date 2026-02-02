@@ -1059,6 +1059,19 @@ def Cm_eval():
     excel_output_path = os.path.join(output_folder_results, "results.xlsx")
     results_df.to_excel(excel_output_path, index=False)
 
+
+    # ======================================================
+    # Save analysis points for browser
+    # ======================================================
+
+    analysis_points_path = os.path.join(
+        config.IMPORT_FOLDER,
+        "analysis_points.json"
+    )
+    with open(analysis_points_path, "w") as f:
+        json.dump(analysis_points, f, indent=2)
+
+
 def start_browser():
     # Import and start the browser
     from browser import app, win
