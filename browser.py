@@ -282,12 +282,7 @@ def replot():
             voltage_plot.setLabel('bottom', trace.XUnit)
             voltage_plot.setLabel('left', trace.Label, units=trace.YUnit)
             first_deriv_plot.setLabel('bottom', trace.XUnit)
-            first_deriv_plot.setLabel('left', 'dV/dt (V/s)')
-            second_deriv_plot.setLabel('bottom', trace.XUnit)
-            second_deriv_plot.setLabel('left', 'd²V/dt² (V/s²)')
-
-            # Plot the main voltage trace
-            voltage_plot.plot(time, data, pen='m', name='Voltage')
+            first_deriv_plot.setLabel('left', 'Capacitance', units='pF')
 
             # Top plot: Raw Cm data (pF)
             voltage_plot.plot(
