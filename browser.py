@@ -292,8 +292,8 @@ def replot():
                 name='Raw Cm'
             )
 
-            # Get the filter_cut_off from analysis_points, with fallback
-            smooth_window = trace_data.get('smooth_window', 0.01)
+            # Lower plot: Processed Cm data (pF)
+            proc = analysis_points[file_name][group_key][series_key][sweep_key][trace_key]
 
             # use Savitzky-Golay filter for smoothing
             dt = time[1] - time[0]
