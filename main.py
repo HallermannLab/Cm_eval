@@ -339,7 +339,15 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         if not np.isnan(A_fit):
             processed_data["cm_1exp"] = fit1_points
 
-        analysis_points[file_name][group_id][series_id][0][2] = sweep_points
+        # ---- 1-expY fit ----
+        if not np.isnan(A_fit_y):
+            processed_data["cm_1expY"] = fit2_points
+
+        # ---- 2-exp fit ----
+        if not np.isnan(A_fit_2exp):
+            processed_data["cm_2exp"] = fit3_points
+
+        analysis_points[file_name][group_id][series_id][0][2] = processed_data
 
         axs[axs_start_idx + 3].plot(time_relative, cm_trace_baseline_subtracted, label="Baseline-subtracted")
         if not np.isnan(A_fit_2exp):
