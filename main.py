@@ -283,6 +283,59 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         else:
             fit_plot_y_2exp = np.zeros_like(fit_plot_x)
 
+        # ======================================================
+        # Export baseline + fits for browser
+        # ======================================================
+
+        # ---- Baseline (linear fit) ----
+        baseline_times = [time[0], time[-1]]
+        baseline_vals = [
+            baseline_fit_line[0] / F_to_pF,   # back to Farad
+            baseline_fit_line[-1] / F_to_pF
+        ]
+
+        baseline_points = list(zip(baseline_times, baseline_vals))
+
+        # ---- Common time axis for fits ----
+        fit_times = fit_plot_x.tolist()
+
+        # ---- 1-exp fit ----
+        if not np.isnan(A_fit):
+            fit1_vals = (fit_plot_y / F_to_pF).tolist()
+            fit1_points = list(zip(fit_times, fit1_vals))
+        else:
+            fit1_points = []
+
+
+        # ---- 1-expY fit ----
+        if not np.isnan(A_fit_y):
+            fit2_vals = (fit_plot_y_expY / F_to_pF).tolist()
+            fit2_points = list(zip(fit_times, fit2_vals))
+        else:
+            fit2_points = []
+
+
+        # ---- 2-exp fit ----
+        if not np.isnan(A_fit_2exp):
+            fit3_vals = (fit_plot_y_2exp / F_to_pF).tolist()
+            fit3_points = list(zip(fit_times, fit3_vals))
+        else:
+            fit3_points = []
+
+
+        # ---- Store for browser ----
+        sweep_points = {
+            "baseline": baseline_points,
+        }
+        if fit1_points:
+            sweep_points["cm_1exp"] = fit1_points
+        if fit2_points:
+            sweep_points["cm_1expY"] = fit2_points
+        if fit3_points:
+            sweep_points["cm_2exp"] = fit3_points
+
+        analysis_points[file_name][group_id][series_id][0][2] = sweep_points
+
         axs[axs_start_idx + 3].plot(time_relative, cm_trace_baseline_subtracted, label="Baseline-subtracted")
         if not np.isnan(A_fit_2exp):
             axs[axs_start_idx + 3].plot(fit_plot_x, fit_plot_y_2exp, 'm--', label="2-Exp fit")
