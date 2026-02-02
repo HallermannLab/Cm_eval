@@ -326,8 +326,12 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         # Export full processed data for browser
         # ======================================================
 
-        # ---- Store for browser ----
-        sweep_points = {
+        processed_data = {
+            # full arrays 
+            "time_rel": time_relative.tolist(),
+            "cm_bs": cm_trace_baseline_subtracted.tolist(),
+            "baseline_full": baseline_fit_line.tolist(),
+            # sparse overlays (optional, for points)
             "baseline": baseline_points,
         }
         if fit1_points:
