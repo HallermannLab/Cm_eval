@@ -96,7 +96,11 @@ def setup_plots_with_derivatives():
     voltage_plot.addLegend()
     voltage_plot.showGrid(x=True, y=True)
 
-    first_deriv_plot = plot_widget.addPlot(row=1, col=0, title="1st Derivative (dV/dt)")
+    # Processed trace (bottom)
+    first_deriv_plot = plot_widget.addPlot(
+        row=1, col=0, title="Processed Capacitance + Fits"
+    )
+    first_deriv_plot.addLegend()
     first_deriv_plot.showGrid(x=True, y=True)
 
     second_deriv_plot = plot_widget.addPlot(row=2, col=0, title="2nd Derivative (d²V/dt²)")
