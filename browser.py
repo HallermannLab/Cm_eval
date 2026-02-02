@@ -79,7 +79,11 @@ win.show()
 
 
 def setup_plots_with_derivatives():
-    """Set up the plot layout with derivative plots (60/20/20 split)."""
+    """
+    CM_eval layout (changed from CC_eval:
+    Top  = raw capacitance
+    Bottom = baseline-subtracted + fits
+    """
     global voltage_plot, first_deriv_plot, second_deriv_plot, plot_widget
 
     # Clear existing layout
