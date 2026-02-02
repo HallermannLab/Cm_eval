@@ -103,8 +103,8 @@ def setup_plots_with_derivatives():
     first_deriv_plot.addLegend()
     first_deriv_plot.showGrid(x=True, y=True)
 
-    second_deriv_plot = plot_widget.addPlot(row=2, col=0, title="2nd Derivative (d²V/dt²)")
-    second_deriv_plot.showGrid(x=True, y=True)
+    # No third plot
+    second_deriv_plot = None
 
     # Set row stretch factors for 60/20/20 split
     plot_widget.ci.layout.setRowStretchFactor(0, 60)
