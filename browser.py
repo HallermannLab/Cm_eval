@@ -89,8 +89,10 @@ def setup_plots_with_derivatives():
     # Clear existing layout
     plot_widget.clear()
 
-    # Create three plots with proper row stretch factors
-    voltage_plot = plot_widget.addPlot(row=0, col=0, title="Voltage Trace")
+    # Raw trace (top)
+    voltage_plot = plot_widget.addPlot(
+        row=0, col=0, title="Raw Capacitance"
+    )
     voltage_plot.addLegend()
     voltage_plot.showGrid(x=True, y=True)
 
