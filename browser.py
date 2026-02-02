@@ -310,17 +310,14 @@ def replot():
                 name="Capacitance (processed)"
             )
 
-            points = trace_data
-            # Plot each type of point with different symbols and colors
-            voltage_symbols = {
-                'threshold': ('o', 'red', 'Threshold'),
-                'threshold_2nd': ('o', 'brown', 'Threshold_2nd'),
-                'half_duration_start': ('s', 'blue', 'Half Duration Start'),
-                'half_duration_end': ('s', 'green', 'Half Duration End'),
-                'peak': ('t', 'yellow', 'Peak'),
-                'ahp': ('d', 'purple', 'AHP'),
-                'dvdt_max': ('p', 'cyan', 'Max dV/dt')
-            }
+            # 1-exp fit
+            if "cm_1exp" in proc and len(proc["cm_1exp"]) > 2:
+                x, y = zip(*proc["cm_1exp"])
+                first_deriv_plot.plot(
+                    x, y,
+                    pen=pg.mkPen('r', width=2),
+                    name="1-exp"
+                )
 
             d1_symbols = {
                 'threshold_v1': ('o', 'red', 'Threshold')
