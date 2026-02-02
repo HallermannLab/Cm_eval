@@ -225,7 +225,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
             A_fit, tau_fit = np.nan, np.nan
 
         # Baseline-subtracted with exponential fit
-        fit_plot_x = time_relative[time_relative >= 0]
+        fit_plot_x = time_relative[fit_mask]
         fit_plot_y = A_fit * np.exp(-fit_plot_x / tau_fit) if not np.isnan(A_fit) else np.zeros_like(fit_plot_x)
         axs[axs_start_idx + 1].plot(time_relative, cm_trace_baseline_subtracted, label="Baseline-subtracted")
         if not np.isnan(A_fit):
