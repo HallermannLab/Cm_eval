@@ -322,6 +322,9 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         else:
             fit3_points = []
 
+        # ======================================================
+        # Export full processed data for browser
+        # ======================================================
 
         # ---- Store for browser ----
         sweep_points = {
