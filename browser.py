@@ -302,11 +302,13 @@ def replot():
             # Clear bottom plot
             first_deriv_plot.clear()
 
-            # Plot derivatives
-            first_deriv_plot.plot(time, d1, pen='blue', name='1st Derivative (raw)')
-            first_deriv_plot.plot(time, d1_in_V_per_s, pen='k', name='1st Derivative (filtered)')
-            second_deriv_plot.plot(time, d2, pen='blue', name='2nd Derivative (raw)')
-            second_deriv_plot.plot(time, d2_in_V_per_s_s, pen='k', name='2nd Derivative (filtered)')
+            # Baseline-subtracted trace
+            first_deriv_plot.plot(
+                time_rel,
+                cm_bs,
+                pen=pg.mkPen('k', width=2),
+                name="Capacitance (processed)"
+            )
 
             points = trace_data
             # Plot each type of point with different symbols and colors
