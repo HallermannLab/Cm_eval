@@ -328,20 +328,14 @@ def replot():
                     name="1-expY"
                 )
 
-            # Plot points on first derivative plot
-            for point_type, (symbol, color, label) in d1_symbols.items():
-                if points.get(point_type):
-                    t_points, v_points = zip(*points[point_type])
-                    scatter_deriv = pg.ScatterPlotItem(
-                        x=t_points,
-                        y=v_points,
-                        symbol=symbol,
-                        size=10,
-                        pen=pg.mkPen(None),
-                        brush=pg.mkBrush(color),
-                        name=label
-                    )
-                    first_deriv_plot.addItem(scatter_deriv)
+            # 2-exp fit
+            if "cm_2exp" in proc and len(proc["cm_2exp"]) > 2:
+                x, y = zip(*proc["cm_2exp"])
+                first_deriv_plot.plot(
+                    x, y,
+                    pen=pg.mkPen('m', width=2),
+                    name="2-exp"
+                )
 
             # Plot points on 2nd derivative plot
             for point_type, (symbol, color, label) in d2_symbols.items():
