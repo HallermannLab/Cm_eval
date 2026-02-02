@@ -299,17 +299,8 @@ def replot():
             time_rel = np.array(proc["time_rel"])
             cm_bs = np.array(proc["cm_bs"])
 
-            # smooth voltages and use numerical derivatives (central differences via np.gradient)
-            #NOTE difference with main.py. Here voltage is in V (to show unmodified traces) and dV/dt is in V/s (also used as thershold value) but d2V/dt2 is in V/ms^2 (to remove 1e6 in the number on the axes)
-            voltage_filt = savgol_filter(data, window_length=win_samples, polyorder=sg_polyorder)
-            d1 = np.gradient(voltage_filt, dt)
-            d1_in_V_per_s = savgol_filter(d1, window_length=win_samples, polyorder=sg_polyorder)
-            d2 = np.gradient(d1_in_V_per_s, dt)
-            d2 = d2 / V_to_mV
-            d2 = d2 / V_to_mV
-            #the 1st is V/s and 2nd is V/ms^2
-            d2_in_V_per_s_s = savgol_filter(d2, window_length=win_samples,
-                                    polyorder=sg_polyorder)
+            # Clear bottom plot
+            first_deriv_plot.clear()
 
             # Plot derivatives
             first_deriv_plot.plot(time, d1, pen='blue', name='1st Derivative (raw)')
