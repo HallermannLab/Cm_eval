@@ -106,10 +106,9 @@ def setup_plots_with_derivatives():
     # No third plot
     second_deriv_plot = None
 
-    # Set row stretch factors for 60/20/20 split
-    plot_widget.ci.layout.setRowStretchFactor(0, 60)
-    plot_widget.ci.layout.setRowStretchFactor(1, 20)
-    plot_widget.ci.layout.setRowStretchFactor(2, 20)
+    # Layout ratio
+    plot_widget.ci.layout.setRowStretchFactor(0, 50)
+    plot_widget.ci.layout.setRowStretchFactor(1, 50)
 
     # Link x-axes for synchronized scrolling
     first_deriv_plot.setXLink(voltage_plot)
