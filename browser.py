@@ -295,15 +295,9 @@ def replot():
             # Lower plot: Processed Cm data (pF)
             proc = analysis_points[file_name][group_key][series_key][sweep_key][trace_key]
 
-            # use Savitzky-Golay filter for smoothing
-            dt = time[1] - time[0]
-            sg_window_s = smooth_window / 1000.0
-            win_samples = int(round(sg_window_s / dt))
-            # make odd and at least polyorder+2
-            if win_samples <= sg_polyorder + 1:
-                win_samples = sg_polyorder + 3
-            if win_samples % 2 == 0:
-                win_samples += 1
+            # Load arrays
+            time_rel = np.array(proc["time_rel"])
+            cm_bs = np.array(proc["cm_bs"])
 
             # smooth voltages and use numerical derivatives (central differences via np.gradient)
             #NOTE difference with main.py. Here voltage is in V (to show unmodified traces) and dV/dt is in V/s (also used as thershold value) but d2V/dt2 is in V/ms^2 (to remove 1e6 in the number on the axes)
