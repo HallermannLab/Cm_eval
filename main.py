@@ -29,7 +29,18 @@ A_to_pA = 1e12
 V_to_mV = 1e3
 F_to_pF = 1e12
 
-window_size_for_median_rolling_filter = 11  # must be odd (for symmetric filtering)
+# initialize analysis points structure (copied from CC_eval)
+analysis_points = defaultdict(
+       lambda: defaultdict(
+           lambda: defaultdict(
+               lambda: defaultdict(
+                   lambda: defaultdict(list)
+               )
+           )
+       )
+   )
+
+window_size_for_median_rolling_filter = 21  # must be odd (for symmetric filtering)
 
 # --- unified PDF page size (used for all pages) ---
 PDF_FIGSIZE = (25, 5 * 6)  # 6 trace types → must match page 1
