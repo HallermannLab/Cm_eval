@@ -427,8 +427,8 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
 
 def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, file_name):
     """
-    aps analysis: baseline subtraction, median filter, fits.
-    Uses same conventions as analyze_trace but WITHOUT voltage-based timing
+    APS analysis: baseline subtraction, median filter, fits
+    Uses the same logic as CME traces (analyze_trace function)
     """
     results = {}
 
