@@ -1086,23 +1086,7 @@ def Cm_eval():
             aps_series_id = int(float(row[aps_col])) - 1
             trace_name = f"aps_{aps_idx + 1}"
 
-
-        # ======================================================================================
-        # --- Load apsl traces (apsl = P/4 traces for leak substraction) ---
-        # ======================================================================================
-
-        apsl_traces_cell = defaultdict(list)  # key: aps_index (0–4), value: list of 4 traces
-        apsl_time_cell = defaultdict(list)
-
-        for aps_idx, apsl_cols in apsl_series_columns.items():
-
-            for apsl_col in apsl_cols:
-
-                if apsl_col not in metadata_df.columns:
-                    continue
-
-                if not is_valid_series(row.get(apsl_col, np.nan)):
-                    continue
+            print(f"Analyzing {trace_name}")
 
                 apsl_series_id = int(float(row[apsl_col])) - 1
                 trace_id = 2  # current trace
