@@ -463,12 +463,20 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
         # ---------- shift time so that t0 = 0s ----------
         time_rel = time - t0
 
-    # ---------- column 1 ----------
-    axs[axs_start_idx].plot(time, cm_trace, label="Raw")
-    axs[axs_start_idx].plot(time, baseline_fit_line, '--', label="Baseline")
-    axs[axs_start_idx].set_title(trace_name)
-    axs[axs_start_idx].set_ylabel("pF")
-    axs[axs_start_idx].legend()
+        # ---------- fit window ----------
+        if t1 is not None:
+            fit_start = t1 - t0  # relative time
+        else:
+            fit_start = 0.002  # 2ms as fallback
+        fit_end = time_rel[-1]
+        fit_mask = (time_rel >= fit_start) & (time_rel <= fit_end)
+
+        # ---------- column 1: Raw + Baseline ----------
+        if do_plot:
+            axs[axs_start_idx].plot(time, cm_trace, label="Original")
+            axs[axs_start_idx].plot(time, baseline_fit_line, '--', label="Baseline fit")
+            axs[axs_start_idx].set_title(trace_name)
+            axs[axs_start_idx].legend()
 
     # ---------- fits ----------
     fit_mask = time_rel >= 0.0
