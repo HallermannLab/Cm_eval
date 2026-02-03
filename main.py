@@ -1207,20 +1207,28 @@ def Cm_eval():
                     )
                     ax.set_axis_off()
 
-            # --- APS average (row 5) ---
-            if aps_avg_trace is not None:
-                analyze_aps_trace(
-                    cm_trace=aps_avg_trace,
-                    time=aps_avg_time,
-                    axs=axs_aps,
-                    axs_start_idx=5 * 5,
-                    trace_name="APS average"
-                )
+            # --- Plot APS average (row 5) ---
+            if aps_avg_result is not None:
+                # Plot the average
+                axs_start_idx = 5 * 5
+                time_rel = aps_avg_result['time_relative']
+                cm_bs = aps_avg_result['cm_trace_baseline_subtracted']
 
-                for col in range(5):
-                    ax = axs_aps[5 * 5 + col]
-                    for line in ax.get_lines():
-                        line.set_color("red")
+                # Column 1: Just show the averaged trace
+                axs_aps[axs_start_idx].plot(time_rel, cm_bs, 'r-', linewidth=2, label="Average")
+                axs_aps[axs_start_idx].set_title("APS Average")
+                axs_aps[axs_start_idx].set_ylabel("pF")
+                axs_aps[axs_start_idx].legend()
+
+                # Columns 2-5: Empty for now
+                for col in range(1, 5):
+                    ax = axs_aps[axs_start_idx + col]
+                    ax.text(
+                        0.5, 0.5, "Average analysis\n(to be implemented)",
+                        ha="center", va="center",
+                        transform=ax.transAxes
+                    )
+                    ax.set_title(f"aps Average - Col {col + 1}")
             else:
                 for col in range(5):
                     ax = axs_aps[5 * 5 + col]
