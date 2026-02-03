@@ -533,22 +533,45 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
             if not np.isnan(A2):
                 ax(2).plot(fit_plot_x, fit2, 'g--', label="1-ExpY fit")
 
-    # --- 2exp ---
-    try:
-        popt, _ = curve_fit(
-            exp_func2,
-            time_rel[fit_mask],
-            cm_bs[fit_mask],
-            p0=(np.max(cm_bs), 5, 0.5, 50),
-            bounds=([0, 0, 0, 0], [np.inf, np.inf, 1, np.inf])
-        )
-        A, tau_fast, aRel, tau_slow = popt
-        fit3 = (
-            A * (1 - aRel) * np.exp(-time_rel / tau_fast)
-            + A * aRel * np.exp(-time_rel / tau_slow)
-        )
-    except:
-        fit3 = np.zeros_like(cm_bs)
+            ax(2).set_title("Baseline-subtracted + 1-expY fit")
+            ax(2).legend()
+            ax(2).set_xlabel("Time (s)")
+            ax(2).set_ylabel("pF")
+
+        # --- 2exp (same as CME) ---
+        try:
+            initial_A = np.max(cm_bs[fit_mask])
+            initial_tau1 = tau1 if not np.isnan(tau1) else 5
+            initial_aRel = 0.5
+            initial_tau2 = initial_tau1 * 10
+
+            popt, _ = curve_fit(
+                exp_func2,
+                time_rel[fit_mask],
+                cm_bs[fit_mask],
+                p0=(initial_A, initial_tau1, initial_aRel, initial_tau2),
+                bounds=([0, 0, 0, 0], [np.inf, np.inf, 1, np.inf])
+            )
+            A, tau_fast, aRel, tau_slow = popt
+            fit3 = (
+                    A * (1 - aRel) * np.exp(-fit_plot_x / tau_fast)
+                    + A * aRel * np.exp(-fit_plot_x / tau_slow)
+            )
+        except Exception as e:
+            print(f"        2-exp fit failed for {trace_name} for {file_name}: {e}")
+            A, tau_fast, aRel, tau_slow = np.nan, np.nan, np.nan, np.nan
+            fit3 = np.zeros_like(fit_plot_x)
+
+        if do_plot:
+            ax(3).plot(time_rel, cm_bs, label="Baseline-subtracted")
+
+            if not np.isnan(A):
+                ax(3).plot(fit_plot_x, fit3, 'm--', label="2-Exp fit")
+
+            ax(3).set_title("Baseline-subtracted + 2-exp fit")
+            ax(3).legend()
+            ax(3).set_xlabel("Time (s)")
+            ax(3).set_ylabel("pF")
 
     axs[axs_start_idx + 3].plot(time_rel, cm_bs)
     axs[axs_start_idx + 3].plot(time_rel, fit3, 'm--')
