@@ -1114,9 +1114,9 @@ def Cm_eval():
                     cm_bs_traces.append(aps_result['cm_trace_baseline_subtracted'])
                     time_rel_traces.append(aps_result['time_relative'])
 
-            aps_traces_trimmed = np.array([
-                trace[:min_len] for trace in aps_traces_cell
-            ])
+            if len(cm_bs_traces) > 0:
+                # Find minimum length
+                min_len = min(len(t) for t in cm_bs_traces)
 
             aps_avg_trace = np.mean(aps_traces_trimmed, axis=0)
             aps_avg_time = aps_time_cell[0][:min_len]
