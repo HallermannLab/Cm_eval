@@ -491,12 +491,16 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
         baseline_time = time[baseline_mask]
         baseline_values = cm_trace[baseline_mask]
 
-    baseline = baseline_values.mean()
-    coeffs = np.polyfit(baseline_time, baseline_values, deg=1)
-    baseline_fit_line = np.polyval(coeffs, time)
+        # -------- Baseline Cm value --------
+        baseline = baseline_values.mean()
 
-    cm_bs = cm_trace - baseline_fit_line
-    cm_bs = median_filter(cm_bs, size=window_size_for_median_rolling_filter)
+        # Fit linear function and subtract
+        coeffs = np.polyfit(baseline_time, baseline_values, deg=1)
+        baseline_fit_line = np.polyval(coeffs, time)
+        cm_bs = cm_trace - baseline_fit_line
+
+        # Apply median filter
+        cm_bs = median_filter(cm_bs, size=window_size_for_median_rolling_filter)
 
         # ---------- shift time so that t0 = 0s ----------
         time_rel = time - t0
