@@ -14,7 +14,6 @@ import heka_reader
 from pyqtgraph.Qt import QtWidgets, QtCore
 import pandas as pd
 import json
-from scipy.signal import savgol_filter
 
 pg.setConfigOption('background', 'w')  # white background
 pg.setConfigOption('foreground', 'k')  # black labels
@@ -85,8 +84,6 @@ def setup_plots_with_derivatives():
     Bottom = baseline-subtracted + fits
     """
     global voltage_plot, first_deriv_plot, second_deriv_plot, plot_widget
-
-    # Clear existing layout
     plot_widget.clear()
 
     # Raw trace (top)
@@ -113,8 +110,6 @@ def setup_plots_with_derivatives():
     # Link x-axes for synchronized scrolling
     first_deriv_plot.setXLink(voltage_plot)
 
-
-
 def setup_plots_voltage_only():
     """Set up the plot layout with only the voltage plot (100% of space)."""
     global voltage_plot, first_deriv_plot, second_deriv_plot, plot_widget
@@ -130,7 +125,6 @@ def setup_plots_voltage_only():
     # Reset derivative plot references
     first_deriv_plot = None
     second_deriv_plot = None
-
 
 def load_clicked():
     """Display a popup menu with available .dat files from metadata."""
@@ -337,20 +331,6 @@ def replot():
                     name="2-exp"
                 )
 
-            # Plot points on 2nd derivative plot
-            for point_type, (symbol, color, label) in d2_symbols.items():
-                if points.get(point_type):
-                    t_points, v_points = zip(*points[point_type])
-                    scatter_deriv = pg.ScatterPlotItem(
-                        x=t_points,
-                        y=v_points,
-                        symbol=symbol,
-                        size=10,
-                        pen=pg.mkPen(None),
-                        brush=pg.mkBrush(color),
-                        name=label
-                    )
-                    second_deriv_plot.addItem(scatter_deriv)
 
         else:
             # Set up layout with voltage only (no analysis points available)
