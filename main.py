@@ -1080,6 +1080,7 @@ def Cm_eval():
                 continue
 
             if not is_valid_series(row.get(aps_col, np.nan)):
+                print(f"Skipping {aps_col} (not available)")
                 continue
 
             aps_series_id = int(float(row[aps_col])) - 1
