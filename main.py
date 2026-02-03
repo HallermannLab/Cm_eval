@@ -1075,8 +1075,7 @@ def Cm_eval():
 
         aps_results_list = []  # Store all aps results for this cell
 
-        for aps_col in aps_series_columns:
-
+        for aps_idx, aps_col in enumerate(aps_series_columns):
             if aps_col not in metadata_df.columns:
                 continue
 
