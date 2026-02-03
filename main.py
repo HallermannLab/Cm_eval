@@ -1102,8 +1102,12 @@ def Cm_eval():
         # --- Compute APS average trace (row 6) ---
         # ======================================================================================
 
-        aps_avg_trace = None
-        aps_avg_time = None
+        aps_avg_result = None
+
+        if len(aps_results_list) > 0:
+            # Get all cm_bs traces
+            cm_bs_traces = []
+            time_rel_traces = []
 
         if len(aps_traces_cell) > 0:
             min_len = min(len(t) for t in aps_traces_cell)
