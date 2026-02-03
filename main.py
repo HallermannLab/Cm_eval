@@ -1084,19 +1084,7 @@ def Cm_eval():
                 continue
 
             aps_series_id = int(float(row[aps_col])) - 1
-            trace_id = 2
-
-            try:
-                cm_trace = F_to_pF * bundle.data[group_id, aps_series_id, 0, trace_id]
-                sampling_interval = bundle.pul[group_id][aps_series_id][0][trace_id].XInterval
-                time = np.arange(len(cm_trace)) * sampling_interval
-
-                valid_mask = ~np.isnan(cm_trace)
-                aps_traces_cell.append(cm_trace[valid_mask])
-                aps_time_cell.append(time[valid_mask])
-
-            except Exception as e:
-                print(f"        Error loading {aps_col} for {file_name}: {e}")
+            trace_name = f"aps_{aps_idx + 1}"
 
 
         # ======================================================================================
