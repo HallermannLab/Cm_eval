@@ -573,9 +573,12 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
             ax(3).set_xlabel("Time (s)")
             ax(3).set_ylabel("pF")
 
-    axs[axs_start_idx + 3].plot(time_rel, cm_bs)
-    axs[axs_start_idx + 3].plot(time_rel, fit3, 'm--')
-    axs[axs_start_idx + 3].set_title("2-exp")
+        # ---------- column 5: Current trace ----------
+        if do_plot:
+            if t0 is not None and t1 is not None:
+                current_plot_start = t0 - 0.002
+                current_plot_end = t1 + 0.002
+                current_mask = (i_trace_time >= current_plot_start) & (i_trace_time <= current_plot_end)
 
     # ---------- column 5 (current placeholder) ----------
     axs[axs_start_idx + 4].text(
