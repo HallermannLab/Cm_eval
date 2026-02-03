@@ -429,6 +429,43 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
     aps analysis: baseline subtraction, median filter, fits.
     Uses same conventions as analyze_trace but WITHOUT voltage-based timing
     """
+    results = {}
+
+    try:
+        # --------------- load traces (same as CME) -----------------
+        # Current trace
+        trace_id = 0
+        i_trace = A_to_pA * bundle.data[group_id, series_id, 0, trace_id]
+        n_points_i = len(i_trace)
+        sampling_interval_i = bundle.pul[group_id][series_id][0][trace_id].XInterval
+        i_trace_time = np.arange(n_points_i) * sampling_interval_i
+
+        # Voltage trace
+        trace_id = 1
+        v_trace = V_to_mV * bundle.data[group_id, series_id, 0, trace_id]
+        n_points_v = len(v_trace)
+        sampling_interval_v = bundle.pul[group_id][series_id][0][trace_id].XInterval
+        v_trace_time = np.arange(n_points_v) * sampling_interval_v
+
+        # Capacitance trace
+        trace_id = 2
+        cm_trace = F_to_pF * bundle.data[group_id, series_id, 0, trace_id]
+        n_points_cm = len(cm_trace)
+        sampling_interval_cm = bundle.pul[group_id][series_id][0][trace_id].XInterval
+        time = np.arange(n_points_cm) * sampling_interval_cm
+
+        # Remove NaNs from cm_trace (and corresponding time points)
+        valid_mask = ~np.isnan(cm_trace)
+        cm_trace = cm_trace[valid_mask]
+        time = time[valid_mask]
+
+        # ---------- detect stimulus from voltage (same principle as in CME, OK?) ----------
+        crossing_indices = np.where(np.diff(v_trace > -20))[0]
+
+        do_plot = axs is not None
+
+        def ax(i):
+            return axs[axs_start_idx + i]
 
         if len(crossing_indices) > 0:
             t0_index = crossing_indices[0]
