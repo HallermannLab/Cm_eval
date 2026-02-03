@@ -1109,8 +1109,10 @@ def Cm_eval():
             cm_bs_traces = []
             time_rel_traces = []
 
-        if len(aps_traces_cell) > 0:
-            min_len = min(len(t) for t in aps_traces_cell)
+            for _, aps_result, _ in aps_results_list:
+                if aps_result['cm_trace_baseline_subtracted'] is not None:
+                    cm_bs_traces.append(aps_result['cm_trace_baseline_subtracted'])
+                    time_rel_traces.append(aps_result['time_relative'])
 
             aps_traces_trimmed = np.array([
                 trace[:min_len] for trace in aps_traces_cell
