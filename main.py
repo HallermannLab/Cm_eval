@@ -503,18 +503,32 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
             if not np.isnan(A1):
                 ax(1).plot(fit_plot_x, fit1, 'r--', label="Exponential fit")
 
-    # --- 1expY ---
-    try:
-        popt, _ = curve_fit(
-            exp_funcY,
-            time_rel[fit_mask],
-            cm_bs[fit_mask],
-            p0=(np.max(cm_bs), 5, np.min(cm_bs))
-        )
-        A2, tau2, y0 = popt
-        fit2 = A2 * np.exp(-time_rel / tau2) + y0
-    except:
-        fit2 = np.zeros_like(cm_bs)
+            ax(1).set_title("Baseline-subtracted + 1-exp fit")
+            ax(1).legend()
+            ax(1).set_xlabel("Time (s)")
+            ax(1).set_ylabel("pF")
+
+        # --- 1expY (same as CME) ---
+        try:
+            initial_y0 = np.min(cm_bs[fit_mask])
+            initial_A = np.max(cm_bs[fit_mask]) - initial_y0
+            initial_tau = tau1 if not np.isnan(tau1) else 5
+
+            popt, _ = curve_fit(
+                exp_funcY,
+                time_rel[fit_mask],
+                cm_bs[fit_mask],
+                p0=(initial_A, initial_tau, initial_y0)
+            )
+            A2, tau2, y0 = popt
+            fit2 = A2 * np.exp(-fit_plot_x / tau2) + y0
+        except Exception as e:
+            print(f"        1-expY fit failed for {trace_name} for {file_name}: {e}")
+            A2, tau2, y0 = np.nan, np.nan, np.nan
+            fit2 = np.zeros_like(fit_plot_x)
+
+        if do_plot:
+            ax(2).plot(time_rel, cm_bs, label="Baseline-subtracted")
 
     axs[axs_start_idx + 2].plot(time_rel, cm_bs)
     axs[axs_start_idx + 2].plot(time_rel, fit2, 'g--')
