@@ -1096,19 +1096,7 @@ def Cm_eval():
                 trace_name, 0, None, file_name  # Pass None for axs for now
             )
 
-                    valid_mask = ~np.isnan(cm_trace)
-
-                    apsl_traces_cell[aps_idx].append(cm_trace[valid_mask])
-                    apsl_time_cell[aps_idx].append(time[valid_mask])
-
-                except Exception as e:
-                    print(f"        Error loading {apsl_col} for {file_name}: {e}")
-
-
-        for aps_idx in range(5):
-            n = len(apsl_traces_cell.get(aps_idx, []))
-            if n != 4:
-                print(f"        WARNING: APS {aps_idx + 1} has {n}/4 apsl traces")
+            aps_results_list.append((aps_idx, aps_result, aps_series_id))
 
         # ======================================================================================
         # --- Compute APS average trace (row 6) ---
