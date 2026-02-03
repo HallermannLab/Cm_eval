@@ -1225,7 +1225,7 @@ def Cm_eval():
                 for col in range(5):
                     ax = axs_aps[5 * 5 + col]
                     ax.text(
-                        0.5, 0.5, "APS not available",
+                        0.5, 0.5, "APS average not available",
                         ha="center", va="center",
                         transform=ax.transAxes
                     )
