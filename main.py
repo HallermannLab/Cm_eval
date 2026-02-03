@@ -1186,26 +1186,35 @@ def Cm_eval():
 
             axs_aps = axs_aps.flatten()
 
-            # --- individual APS (rows 0–4) ---
-            for i in range(min(5, len(aps_traces_cell))):
-                analyze_aps_trace(
-                    cm_trace=aps_traces_cell[i],
-                    time=aps_time_cell[i],
-                    axs=axs_aps,
-                    axs_start_idx=i * 5,
-                    trace_name=f"APS {i + 1}"
-                )
+            # --- Plot individual APS (rows 0–4) ---
+            for row_idx in range(5):
+                # Find if we have data for this APS
+                aps_data = None
+                series_id_for_plot = None
 
-            # --- mark missing individual APS rows ---
-            for i in range(len(aps_traces_cell), 5):
-                for col in range(5):
-                    ax = axs_aps[i * 5 + col]
-                    ax.text(
-                        0.5, 0.5, "APS not available",
-                        ha="center", va="center",
-                        transform=ax.transAxes
+                for aps_idx, aps_result, series_id in aps_results_list:
+                    if aps_idx == row_idx:
+                        aps_data = aps_result
+                        series_id_for_plot = series_id
+                        break
+
+                if aps_data is not None:
+                    # Re-run analysis with plotting enabled
+                    trace_name = f"aps_{row_idx + 1}"
+                    analyze_aps_trace(
+                        bundle, group_id, series_id_for_plot,
+                        trace_name, row_idx * 5, axs_aps, file_name
                     )
-                    ax.set_axis_off()
+                else:
+                    # Mark as missing
+                    for col in range(5):
+                        ax = axs_aps[row_idx * 5 + col]
+                        ax.text(
+                            0.5, 0.5, f"APS {row_idx + 1} not available",
+                            ha="center", va="center",
+                            transform=ax.transAxes
+                        )
+                        ax.set_axis_off()
 
             # --- Plot APS average (row 5) ---
             if aps_avg_result is not None:
