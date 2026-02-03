@@ -430,9 +430,20 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
     Uses same conventions as analyze_trace but WITHOUT voltage-based timing
     """
 
-    # ---------- baseline window (first 10–90%) ----------
-    t0 = time[0]
-    t1 = time[int(0.2 * len(time))]
+        if len(crossing_indices) > 0:
+            t0_index = crossing_indices[0]
+            t0 = v_trace_time[t0_index]
+            # Find t1
+            later_crossings = crossing_indices[crossing_indices > t0_index]
+            if len(later_crossings) > 0:
+                t1_index = later_crossings[0]
+                t1 = v_trace_time[t1_index]
+            else:
+                t1 = None
+        else:
+            # fallback: first 20% if detection fails
+            t0 = time[int(0.2 * len(time))]
+            t1 = None
 
     baseline_mask = (time >= t0) & (time <= t1)
     baseline_time = time[baseline_mask]
