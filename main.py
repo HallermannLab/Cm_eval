@@ -445,9 +445,13 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
             t0 = time[int(0.2 * len(time))]
             t1 = None
 
-    baseline_mask = (time >= t0) & (time <= t1)
-    baseline_time = time[baseline_mask]
-    baseline_values = cm_trace[baseline_mask]
+        # ---------- baseline window (same as CME) ----------
+        trace_base_st = 0.1 * t0
+        trace_base_end = 0.9 * t0
+
+        baseline_mask = (time >= trace_base_st) & (time <= trace_base_end)
+        baseline_time = time[baseline_mask]
+        baseline_values = cm_trace[baseline_mask]
 
     baseline = baseline_values.mean()
     coeffs = np.polyfit(baseline_time, baseline_values, deg=1)
