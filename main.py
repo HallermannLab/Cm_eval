@@ -1073,8 +1073,7 @@ def Cm_eval():
         # --- Load aps traces ---
         # ======================================================================================
 
-        aps_traces_cell = []
-        aps_time_cell = []
+        aps_results_list = []  # Store all aps results for this cell
 
         for aps_col in aps_series_columns:
 
