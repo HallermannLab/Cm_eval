@@ -1091,10 +1091,10 @@ def Cm_eval():
                 apsl_series_id = int(float(row[apsl_col])) - 1
                 trace_id = 2  # current trace
 
-                try:
-                    cm_trace = F_to_pF * bundle.data[group_id, apsl_series_id, 0, trace_id]
-                    sampling_interval = bundle.pul[group_id][apsl_series_id][0][trace_id].XInterval
-                    time = np.arange(len(cm_trace)) * sampling_interval
+            aps_result = analyze_aps_trace(
+                bundle, group_id, aps_series_id,
+                trace_name, 0, None, file_name  # Pass None for axs for now
+            )
 
                     valid_mask = ~np.isnan(cm_trace)
 
