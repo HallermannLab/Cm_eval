@@ -1118,8 +1118,18 @@ def Cm_eval():
                 # Find minimum length
                 min_len = min(len(t) for t in cm_bs_traces)
 
-            aps_avg_trace = np.mean(aps_traces_trimmed, axis=0)
-            aps_avg_time = aps_time_cell[0][:min_len]
+                # Trim all traces to same length
+                cm_bs_trimmed = np.array([trace[:min_len] for trace in cm_bs_traces])
+
+                # Compute average
+                aps_avg_cm_bs = np.mean(cm_bs_trimmed, axis=0)
+                aps_avg_time_rel = time_rel_traces[0][:min_len]
+
+                # Create a result dictionary for the average
+                aps_avg_result = {
+                    'cm_trace_baseline_subtracted': aps_avg_cm_bs,
+                    'time_relative': aps_avg_time_rel
+                }
 
         # ======================================================================================
         # --- SAVE PER-CELL PDF WITH 2 PAGES (CME + APS) ---
