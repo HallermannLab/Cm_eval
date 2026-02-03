@@ -481,19 +481,24 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
         # ---------- fits ----------
         fit_plot_x = time_rel[fit_mask]
 
-    # --- 1exp ---
-    try:
-        popt, _ = curve_fit(
-            exp_func,
-            time_rel[fit_mask],
-            cm_bs[fit_mask],
-            p0=(np.max(cm_bs), 5),
-            bounds=([0, 0], [np.inf, np.inf])
-        )
-        A1, tau1 = popt
-        fit1 = A1 * np.exp(-time_rel / tau1)
-    except:
-        fit1 = np.zeros_like(cm_bs)
+        # --- 1exp (same as CME) ---
+        try:
+            popt, _ = curve_fit(
+                exp_func,
+                time_rel[fit_mask],
+                cm_bs[fit_mask],
+                p0=(np.max(cm_bs), 5),
+                bounds=([0, 0], [np.inf, np.inf])
+            )
+            A1, tau1 = popt
+            fit1 = A1 * np.exp(-fit_plot_x / tau1)
+        except Exception as e:
+            print(f"        1-exp fit failed for {trace_name} for {file_name}: {e}")
+            A1, tau1 = np.nan, np.nan
+            fit1 = np.zeros_like(fit_plot_x)
+
+        if do_plot:
+            ax(1).plot(time_rel, cm_bs, label="Baseline-subtracted")
 
     axs[axs_start_idx + 1].plot(time_rel, cm_bs)
     axs[axs_start_idx + 1].plot(time_rel, fit1, 'r--')
