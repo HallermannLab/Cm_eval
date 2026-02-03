@@ -580,14 +580,87 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
                 current_plot_end = t1 + 0.002
                 current_mask = (i_trace_time >= current_plot_start) & (i_trace_time <= current_plot_end)
 
-    # ---------- column 5 (current placeholder) ----------
-    axs[axs_start_idx + 4].text(
-        0.5, 0.5,
-        "Current\n(leak subtraction later)",
-        ha="center", va="center",
-        transform=axs[axs_start_idx + 4].transAxes
-    )
-    axs[axs_start_idx + 4].set_title("Current")
+                if np.any(current_mask):
+                    ax(4).plot(i_trace_time[current_mask], i_trace[current_mask],
+                               'c-', linewidth=1, label="Current")
+                    ax(4).axvline(x=t0, color='r', linestyle='--', alpha=0.7, label="t0")
+                    ax(4).axvline(x=t1, color='g', linestyle='--', alpha=0.7, label="t1")
+                    ax(4).set_title("Current Trace")
+                    ax(4).legend()
+                    ax(4).set_xlabel("Time (s)")
+                    ax(4).set_ylabel("Current (pA)")
+                    ax(4).grid(True, alpha=0.3)
+                else:
+                    ax(4).text(0.5, 0.5, "No current data\nin time window",
+                               ha='center', va='center', transform=ax(4).transAxes)
+                    ax(4).set_title("Current Trace - No Data")
+            else:
+                ax(4).text(0.5, 0.5, "t0 or t1 not found",
+                           ha='center', va='center', transform=ax(4).transAxes)
+                ax(4).set_title("Current Trace - No Timing")
+
+        # ======================================================
+        # Export data for browser (same structure as CME)
+        # ======================================================
+        baseline_times = [time[0], time[-1]]
+        baseline_vals = [baseline_fit_line[0], baseline_fit_line[-1]]
+        baseline_points = list(zip(baseline_times, baseline_vals))
+
+        processed_data = {
+            "time_rel": time_rel.tolist(),
+            "cm_bs": cm_bs.tolist(),
+            "baseline_full": baseline_fit_line.tolist(),
+            "baseline": baseline_points,
+        }
+
+        if not np.isnan(A1):
+            processed_data["cm_1exp"] = list(zip(fit_plot_x.tolist(), fit1.tolist()))
+
+        if not np.isnan(A2):
+            processed_data["cm_1expY"] = list(zip(fit_plot_x.tolist(), fit2.tolist()))
+
+        if not np.isnan(A):
+            processed_data["cm_2exp"] = list(zip(fit_plot_x.tolist(), fit3.tolist()))
+
+        analysis_points[file_name][group_id][series_id][0][2] = processed_data
+
+        # Store results
+        results = {
+            f'{trace_name}_baseline': baseline,
+            f'{trace_name}_1exp_A': A1,
+            f'{trace_name}_1exp_tau': tau1,
+            f'{trace_name}_1expY_A': A2,
+            f'{trace_name}_1expY_tau': tau2,
+            f'{trace_name}_1expY_y0': y0,
+            f'{trace_name}_2exp_A': A,
+            f'{trace_name}_2exp_tau1': tau_fast,
+            f'{trace_name}_2exp_aRel': aRel,
+            f'{trace_name}_2exp_tau2': tau_slow,
+            'cm_trace_baseline_subtracted': cm_bs,
+            'time_relative': time_rel
+        }
+
+    except Exception as e:
+        print(f"        Error analyzing {trace_name} for {file_name}: {e}")
+        import traceback
+        traceback.print_exc()
+        # Return NaN values for failed analysis
+        results = {
+            f'{trace_name}_baseline': np.nan,
+            f'{trace_name}_1exp_A': np.nan,
+            f'{trace_name}_1exp_tau': np.nan,
+            f'{trace_name}_1expY_A': np.nan,
+            f'{trace_name}_1expY_tau': np.nan,
+            f'{trace_name}_1expY_y0': np.nan,
+            f'{trace_name}_2exp_A': np.nan,
+            f'{trace_name}_2exp_tau1': np.nan,
+            f'{trace_name}_2exp_aRel': np.nan,
+            f'{trace_name}_2exp_tau2': np.nan,
+            'cm_trace_baseline_subtracted': None,
+            'time_relative': None
+        }
+
+    return results
 
 
 def plot_combined_group_analysis(all_traces, group_traces, all_time_arrays, group_time_arrays,
