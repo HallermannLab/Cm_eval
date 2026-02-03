@@ -478,8 +478,8 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
             axs[axs_start_idx].set_title(trace_name)
             axs[axs_start_idx].legend()
 
-    # ---------- fits ----------
-    fit_mask = time_rel >= 0.0
+        # ---------- fits ----------
+        fit_plot_x = time_rel[fit_mask]
 
     # --- 1exp ---
     try:
