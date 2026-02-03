@@ -460,7 +460,8 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
     cm_bs = cm_trace - baseline_fit_line
     cm_bs = median_filter(cm_bs, size=window_size_for_median_rolling_filter)
 
-    time_rel = time - time[0]
+        # ---------- shift time so that t0 = 0s ----------
+        time_rel = time - t0
 
     # ---------- column 1 ----------
     axs[axs_start_idx].plot(time, cm_trace, label="Raw")
