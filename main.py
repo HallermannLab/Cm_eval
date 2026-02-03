@@ -500,9 +500,8 @@ def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, f
         if do_plot:
             ax(1).plot(time_rel, cm_bs, label="Baseline-subtracted")
 
-    axs[axs_start_idx + 1].plot(time_rel, cm_bs)
-    axs[axs_start_idx + 1].plot(time_rel, fit1, 'r--')
-    axs[axs_start_idx + 1].set_title("1-exp")
+            if not np.isnan(A1):
+                ax(1).plot(fit_plot_x, fit1, 'r--', label="Exponential fit")
 
     # --- 1expY ---
     try:
