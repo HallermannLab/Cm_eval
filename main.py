@@ -1322,21 +1322,13 @@ def Cm_eval():
                 time_rel = aps_avg_result['time_relative']
                 cm_bs = aps_avg_result['cm_trace_baseline_subtracted']
 
-                # Column 1: Just show the averaged trace
-                axs_aps[axs_start_idx].plot(time_rel, cm_bs, 'r-', linewidth=2, label="Average")
-                axs_aps[axs_start_idx].set_title("APS Average")
-                axs_aps[axs_start_idx].set_ylabel("pF")
-                axs_aps[axs_start_idx].legend()
-
-                # Columns 2-5: Empty for now
-                for col in range(1, 5):
-                    ax = axs_aps[axs_start_idx + col]
-                    ax.text(
-                        0.5, 0.5, "Average analysis\n(to be implemented)",
-                        ha="center", va="center",
-                        transform=ax.transAxes
-                    )
-                    ax.set_title(f"aps Average - Col {col + 1}")
+                analyze_aps_average(
+                    time_rel,
+                    cm_bs,
+                    axs_start_idx,
+                    axs_aps,
+                    trace_name="aps Average"
+                )
             else:
                 for col in range(5):
                     ax = axs_aps[5 * 5 + col]
