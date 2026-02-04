@@ -704,6 +704,130 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
 
     return results
 
+def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Average"):
+    """
+    Fit and plot APS average trace
+    (same logic as analyze_aps_trace, but works on pre-averaged data)
+    cannot reuse analyze_aps_trace bc it reads from bundle (apparently?)
+    """
+
+    results = {}
+
+    try:
+        # ---------- fit window ----------
+        fit_start = 0.002   # 2 ms
+        fit_end = time_rel[-1]
+
+        fit_mask = (time_rel >= fit_start) & (time_rel <= fit_end)
+        fit_plot_x = time_rel[fit_mask]
+
+        # ---------- Column 1: Raw ----------
+        axs[axs_start_idx].plot(time_rel, cm_bs, color='magenta', linewidth=2, label="Average")
+        axs[axs_start_idx].set_title(trace_name)
+        axs[axs_start_idx].legend()
+        axs[axs_start_idx].set_ylabel("pF")
+
+        # ---------- 1-exp ----------
+        try:
+            popt, _ = curve_fit(
+                exp_func,
+                time_rel[fit_mask],
+                cm_bs[fit_mask],
+                p0=(np.max(cm_bs), 5),
+                bounds=([0, 0], [np.inf, np.inf])
+            )
+            A1, tau1 = popt
+            fit1 = A1 * np.exp(-fit_plot_x / tau1)
+        except:
+            A1, tau1 = np.nan, np.nan
+            fit1 = np.zeros_like(fit_plot_x)
+
+        axs[axs_start_idx + 1].plot(time_rel, cm_bs, label="Avg")
+        if not np.isnan(A1):
+            axs[axs_start_idx + 1].plot(fit_plot_x, fit1, 'r--', label="1-exp")
+
+        axs[axs_start_idx + 1].set_title("1-exp fit")
+        axs[axs_start_idx + 1].legend()
+
+        # ---------- 1-expY ----------
+        try:
+            y0 = np.min(cm_bs[fit_mask])
+            A0 = np.max(cm_bs[fit_mask]) - y0
+            tau0 = tau1 if not np.isnan(tau1) else 5
+
+            popt, _ = curve_fit(
+                exp_funcY,
+                time_rel[fit_mask],
+                cm_bs[fit_mask],
+                p0=(A0, tau0, y0)
+            )
+
+            A2, tau2, y0 = popt
+            fit2 = A2 * np.exp(-fit_plot_x / tau2) + y0
+
+        except:
+            A2, tau2, y0 = np.nan, np.nan, np.nan
+            fit2 = np.zeros_like(fit_plot_x)
+
+        axs[axs_start_idx + 2].plot(time_rel, cm_bs, label="Avg")
+        if not np.isnan(A2):
+            axs[axs_start_idx + 2].plot(fit_plot_x, fit2, 'g--', label="1-expY")
+
+        axs[axs_start_idx + 2].set_title("1-expY fit")
+        axs[axs_start_idx + 2].legend()
+
+        # ---------- 2-exp ----------
+        try:
+            A0 = np.max(cm_bs[fit_mask])
+            tau_fast0 = tau1 if not np.isnan(tau1) else 5
+            aRel0 = 0.5
+            tau_slow0 = tau_fast0 * 10
+
+            popt, _ = curve_fit(
+                exp_func2,
+                time_rel[fit_mask],
+                cm_bs[fit_mask],
+                p0=(A0, tau_fast0, aRel0, tau_slow0),
+                bounds=([0, 0, 0, 0], [np.inf, np.inf, 1, np.inf])
+            )
+
+            A, tau_fast, aRel, tau_slow = popt
+
+            fit3 = (
+                A * (1 - aRel) * np.exp(-fit_plot_x / tau_fast) +
+                A * aRel * np.exp(-fit_plot_x / tau_slow)
+            )
+
+        except:
+            A, tau_fast, aRel, tau_slow = np.nan, np.nan, np.nan, np.nan
+            fit3 = np.zeros_like(fit_plot_x)
+
+        axs[axs_start_idx + 3].plot(time_rel, cm_bs, label="Avg")
+        if not np.isnan(A):
+            axs[axs_start_idx + 3].plot(fit_plot_x, fit3, 'm--', label="2-exp")
+
+        axs[axs_start_idx + 3].set_title("2-exp fit")
+        axs[axs_start_idx + 3].legend()
+
+        # ---------- Column 5: Empty ----------
+        axs[axs_start_idx + 4].axis("off")
+
+        results = {
+            "A1": A1,
+            "tau1": tau1,
+            "A2": A2,
+            "tau2": tau2,
+            "y0": y0,
+            "A": A,
+            "tau_fast": tau_fast,
+            "tau_slow": tau_slow,
+            "aRel": aRel
+        }
+
+    except Exception as e:
+        print("APS average analysis failed:", e)
+
+    return results
 
 def plot_combined_group_analysis(all_traces, group_traces, all_time_arrays, group_time_arrays,
                                  trace_types, unique_groups, output_folder_results):
