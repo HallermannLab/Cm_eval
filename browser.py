@@ -20,6 +20,7 @@ pg.setConfigOption('foreground', 'k')  # black labels
 
 V_to_mV = 1e3
 F_to_pF = 1e12
+A_to_pA = 1e12
 
 sg_polyorder = 3
 
