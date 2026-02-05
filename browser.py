@@ -111,6 +111,36 @@ def setup_plots_with_derivatives():
     # Link x-axes for synchronized scrolling
     first_deriv_plot.setXLink(voltage_plot)
 
+def setup_plots_with_calcium():
+    """
+    Current trace layout with leak subtraction (for Imon-1, trace_id=0):
+    Top    = raw current trace
+    Bottom = calcium leak subtraction (APS raw, Leak P/4, Ca subtracted)
+    """
+    global voltage_plot, first_deriv_plot, second_deriv_plot, plot_widget
+    plot_widget.clear()
+
+    # Raw current trace (top)
+    voltage_plot = plot_widget.addPlot(
+        row=0, col=0, title="Current Trace (Imon-1)"
+    )
+    voltage_plot.addLegend()
+    voltage_plot.showGrid(x=True, y=True)
+
+    # Calcium leak subtraction (bottom)
+    first_deriv_plot = plot_widget.addPlot(
+        row=1, col=0, title="Calcium Current (Leak Subtraction)"
+    )
+    first_deriv_plot.addLegend()
+    first_deriv_plot.showGrid(x=True, y=True)
+
+    # No third plot
+    second_deriv_plot = None
+
+    # Layout ratio
+    plot_widget.ci.layout.setRowStretchFactor(0, 50)
+    plot_widget.ci.layout.setRowStretchFactor(1, 50)
+
 def setup_plots_voltage_only():
     """Set up the plot layout with only the voltage plot (100% of space)."""
     global voltage_plot, first_deriv_plot, second_deriv_plot, plot_widget
