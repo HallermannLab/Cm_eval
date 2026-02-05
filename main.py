@@ -829,6 +829,217 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
 
     return results
 
+def analyze_aps_with_leak_subtraction(
+    bundle,
+    group_id,
+    aps_series_id,
+    apsl_series_ids,
+    trace_name,
+    axs_start_idx,
+    axs,
+    file_name
+):
+    """
+    Window-based P/4 leak subtraction
+    (trying  fixed time windows bc voltage-based stimulus alignment didnt work)
+    """
+
+    print(f"\n=== Windowed Leak Subtraction: {trace_name} ===")
+
+    results = {}
+
+    # ----------------------------
+    # USER-DEFINED WINDOWS (s)
+    # ----------------------------
+
+    aps_t0 = 0.50001
+    aps_t1 = 0.505
+
+    apsl_t0 = 0.00501
+    apsl_t1 = 0.01
+
+
+    try:
+
+        # =====================================================
+        # Load aps
+        # =====================================================
+
+        i_aps = A_to_pA * bundle.data[group_id, aps_series_id, 0, 0]
+
+        dt = bundle.pul[group_id][aps_series_id][0][0].XInterval
+
+        t_aps = np.arange(len(i_aps)) * dt
+
+
+        # =====================================================
+        # Load apsl
+        # =====================================================
+
+        apsl_currents = []
+
+        for sid in apsl_series_ids:
+
+            i = A_to_pA * bundle.data[group_id, sid, 0, 0]
+
+            apsl_currents.append(i)
+
+        apsl_currents = np.array(apsl_currents)
+
+
+        # =====================================================
+        # Build leak template (P/4 sum)
+        # =====================================================
+
+        leak_current = np.sum(apsl_currents, axis=0)
+
+        t_leak = np.arange(len(leak_current)) * dt
+
+
+        # =====================================================
+        # Cut windows by time
+        # =====================================================
+
+        aps_mask = (t_aps >= aps_t0) & (t_aps <= aps_t1)
+        leak_mask = (t_leak >= apsl_t0) & (t_leak <= apsl_t1)
+
+        i_aps_win = i_aps[aps_mask]
+        i_leak_win = leak_current[leak_mask]
+
+        t_aps_win = t_aps[aps_mask]
+
+
+        print("aps window points:", len(i_aps_win))
+        print("Leak window points:", len(i_leak_win))
+
+
+        if len(i_aps_win) == 0 or len(i_leak_win) == 0:
+            raise RuntimeError("Empty window — check times")
+
+
+        # =====================================================
+        # Match length
+        # =====================================================
+
+        n = min(len(i_aps_win), len(i_leak_win))
+
+        i_aps_win = i_aps_win[:n]
+        i_leak_win = i_leak_win[:n]
+        t_aps_win = t_aps_win[:n]
+
+        # =====================================================
+        # Re-zero time
+        # =====================================================
+
+        t = t_aps_win - t_aps_win[0]
+
+        # =====================================================
+        # Baseline subtraction (bc of baseline drift)
+        # =====================================================
+
+        # Use first 0.2 ms for baseline
+        bl_dur = 0.0002  # 0.2 ms
+        bl_pts = int(bl_dur / dt)
+        bl_pts = min(bl_pts, n)
+
+        aps_baseline = np.mean(i_aps_win[:bl_pts])
+        leak_baseline = np.mean(i_leak_win[:bl_pts])
+
+        # Subtract
+        i_aps_win = i_aps_win - aps_baseline
+        i_leak_win = i_leak_win - leak_baseline
+
+        print(
+            f"aps baseline shift:  {aps_baseline:+.2f} pA | "
+            f"Leak baseline shift: {leak_baseline:+.2f} pA"
+        )
+
+        # =====================================================
+        # Subtract
+        # =====================================================
+
+        i_ca = i_aps_win - i_leak_win
+
+        # =====================================================
+        # Quality control (first 0.3 ms) sinnvoll?
+        # =====================================================
+
+        qc_end = int(0.0003 / dt)
+        qc_end = min(qc_end, n)
+
+        rms = np.std(i_ca[:qc_end])
+
+        print(f"Residual RMS (0–0.3 ms): {rms:.2f} pA")
+
+
+        # =====================================================
+        # Plot (column 5)
+        # =====================================================
+
+        if axs is not None:
+
+            ax = axs[axs_start_idx + 4]
+
+            ax.plot(
+                t * 1e3,
+                i_aps_win,
+                color="gray",
+                alpha=0.6,
+                label="aps raw"
+            )
+
+            ax.plot(
+                t * 1e3,
+                i_leak_win,
+                color="blue",
+                alpha=0.7,
+                label="Leak (P/4)"
+            )
+
+            ax.plot(
+                t * 1e3,
+                i_ca,
+                color="magenta",
+                linewidth=2,
+                label="Ca (subtracted)"
+            )
+
+            ax.set_title(f"{trace_name} leak subtraction")
+
+            ax.set_xlabel("Time (ms)")
+            ax.set_ylabel("Current (pA)")
+
+            ax.legend(fontsize=8)
+            ax.grid(True, alpha=0.3)
+
+
+        # =====================================================
+        # Store
+        # =====================================================
+
+        results = {
+            f"{trace_name}_leak_raw": i_aps_win,
+            f"{trace_name}_leak_leak": i_leak_win,
+            f"{trace_name}_leak_ca": i_ca,
+            f"{trace_name}_leak_time": t,
+            f"{trace_name}_leak_rms": rms
+        }
+
+
+    except Exception as e:
+
+        print(f"❌ Leak subtraction failed: {e}")
+
+        results = {
+            f"{trace_name}_leak_raw": None,
+            f"{trace_name}_leak_leak": None,
+            f"{trace_name}_leak_ca": None,
+            f"{trace_name}_leak_time": None,
+            f"{trace_name}_leak_rms": None
+        }
+
+    return results
+
 def plot_combined_group_analysis(all_traces, group_traces, all_time_arrays, group_time_arrays,
                                  trace_types, unique_groups, output_folder_results):
     """
