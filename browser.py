@@ -457,7 +457,14 @@ def replot():
             voltage_plot.setLabel('bottom', trace.XUnit)
             voltage_plot.setLabel('left', 'Capacitance', units='pF')
 
-            # Plot the main voltage trace
+        # ========================================================================
+        # CASE 3: Other traces (e.g., trace_id = 1 for voltage)
+        # ========================================================================
+        else:
+            # Just show the raw trace
+            setup_plots_voltage_only()
+            voltage_plot.setLabel('bottom', trace.XUnit)
+            voltage_plot.setLabel('left', trace.Label, units=trace.YUnit)
             voltage_plot.plot(time, data, pen='k', name='Trace')
 
 
