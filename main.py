@@ -1515,6 +1515,42 @@ def Cm_eval():
                         bundle, group_id, series_id_for_plot,
                         trace_name, row_idx * 5, axs_aps, file_name
                     )
+
+                    # --------------------------------------------------
+                    # Leak subtraction (column 5)
+                    # --------------------------------------------------
+
+                    # Collect apsl series IDs for this aps
+                    apsl_cols = apsl_series_columns.get(row_idx, [])
+                    apsl_ids = []
+
+                    for col in apsl_cols:
+
+                        if col in metadata_df.columns:
+
+                            val = row.get(col, np.nan)
+
+                            if is_valid_series(val):
+                                apsl_ids.append(int(float(val)) - 1)
+
+                    print(f"\naps {row_idx + 1}: found {len(apsl_ids)} apsl traces")
+
+                    if len(apsl_ids) > 0:
+
+                        analyze_aps_with_leak_subtraction(
+                            bundle=bundle,
+                            group_id=group_id,
+                            aps_series_id=series_id_for_plot,
+                            apsl_series_ids=apsl_ids,
+                            trace_name=trace_name,
+                            axs_start_idx=row_idx * 5,
+                            axs=axs_aps,
+                            file_name=file_name
+                        )
+
+                    else:
+                        print(f"⚠️ No apsl traces for {trace_name}")
+
                 else:
                     # Mark as missing
                     for col in range(5):
