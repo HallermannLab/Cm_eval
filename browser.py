@@ -276,7 +276,7 @@ def replot():
         group_id = index[0]  # e.g., 0 (integer)
         series_id = index[1]  # e.g., 1 (integer)
         sweep_id = index[2]  # e.g., 2 (integer)
-        trace_id = index[3]  # e.g., 0 (integer)
+        trace_id = index[3]  # e.g., 0 for Imon-1, 2 for Cm
 
         # Check if we have analysis points for this file and indices
         # Convert numeric indices to strings to match JSON structure
