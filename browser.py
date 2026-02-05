@@ -292,12 +292,98 @@ def replot():
         # Get the file name from the bundle
         file_name = os.path.basename(bundle.file_name)
 
-        # Check if we have analysis points for this file and indices
-        has_analysis_points = (file_name in analysis_points and
-                               group_key in analysis_points[file_name] and
-                               series_key in analysis_points[file_name][group_key] and
-                               sweep_key in analysis_points[file_name][group_key][series_key] and
-                               trace_key in analysis_points[file_name][group_key][series_key][sweep_key])
+        # ========================================================================
+        # CASE 1: Imon-1 trace (trace_id = 0) with calcium leak subtraction data
+        # ========================================================================
+        if trace_id == 0:
+            # Check if we have calcium leak subtraction data for this trace
+            has_calcium_data = (file_name in analysis_points and
+                                group_key in analysis_points[file_name] and
+                                series_key in analysis_points[file_name][group_key] and
+                                sweep_key in analysis_points[file_name][group_key][series_key] and
+                                trace_key in analysis_points[file_name][group_key][series_key][sweep_key] and
+                                "calcium_leak" in analysis_points[file_name][group_key][series_key][sweep_key][
+                                    trace_key])
+
+            if has_calcium_data:
+                # Set up layout with calcium leak subtraction (2 panels)
+                setup_plots_with_calcium()
+
+                # Set labels
+                voltage_plot.setLabel('bottom', trace.XUnit)
+                voltage_plot.setLabel('left', trace.Label, units=trace.YUnit)
+                first_deriv_plot.setLabel('bottom', 'Time', units='ms')
+                first_deriv_plot.setLabel('left', 'Current', units='pA')
+
+                # Top plot: Raw current trace (Imon-1)
+                voltage_plot.plot(
+                    time,
+                    A_to_pA * data,  # Convert to pA
+                    pen='k',
+                    name='Imon-1'
+                )
+
+                # Bottom plot: Calcium leak subtraction
+                first_deriv_plot.clear()
+
+                calcium_data = analysis_points[file_name][group_key][series_key][sweep_key][trace_key]["calcium_leak"]
+
+                # Convert time to ms for better readability
+                t_ms = np.array(calcium_data["time"]) * 1e3
+
+                # Plot raw aps current
+                if "raw" in calcium_data and len(calcium_data["raw"]) > 0:
+                    first_deriv_plot.plot(
+                        t_ms,
+                        calcium_data["raw"],
+                        pen=pg.mkPen('gray', width=1.5, style=QtCore.Qt.DashLine),
+                        name="APS raw"
+                    )
+
+                # Plot leak current
+                if "leak" in calcium_data and len(calcium_data["leak"]) > 0:
+                    first_deriv_plot.plot(
+                        t_ms,
+                        calcium_data["leak"],
+                        pen=pg.mkPen('b', width=1.5),
+                        name="Leak (P/4)"
+                    )
+
+                # Plot calcium current (subtracted)
+                if "ca" in calcium_data and len(calcium_data["ca"]) > 0:
+                    first_deriv_plot.plot(
+                        t_ms,
+                        calcium_data["ca"],
+                        pen=pg.mkPen('m', width=2.5),
+                        name="Ca (subtracted)"
+                    )
+
+                # Add RMS info if available
+                if "rms" in calcium_data:
+                    rms_text = f"RMS: {calcium_data['rms']:.2f} pA"
+                    text_item = pg.TextItem(rms_text, anchor=(0, 1), color='k')
+                    # Position at top left of plot
+                    y_max = max(calcium_data["ca"]) if len(calcium_data["ca"]) > 0 else 0
+                    text_item.setPos(t_ms[0], y_max * 0.95)
+                    first_deriv_plot.addItem(text_item)
+
+            else:
+                # No calcium data - just show the raw current trace
+                setup_plots_voltage_only()
+                voltage_plot.setLabel('bottom', trace.XUnit)
+                voltage_plot.setLabel('left', trace.Label, units=trace.YUnit)
+                voltage_plot.plot(time, A_to_pA * data, pen='k', name='Imon-1')
+
+        # ========================================================================
+        # CASE 2: Cm trace (trace_id = 2) with capacitance analysis
+        # ========================================================================
+        elif trace_id == 2:
+            # Check if we have analysis points for Cm trace
+            has_analysis_points = (file_name in analysis_points and
+                                   group_key in analysis_points[file_name] and
+                                   series_key in analysis_points[file_name][group_key] and
+                                   sweep_key in analysis_points[file_name][group_key][series_key] and
+                                   trace_key in analysis_points[file_name][group_key][series_key][sweep_key])
 
         if has_analysis_points:
             # Set up layout with derivatives
