@@ -285,6 +285,11 @@ def update_cursor_text():
 def replot():
     """Update plot and data tree when user selects a trace."""
     global voltage_plot, first_deriv_plot, second_deriv_plot
+    global cursor_a, cursor_b, cursor_text
+
+    cursor_a = None
+    cursor_b = None
+    cursor_text = None
 
     # Clear data tree
     data_tree.clear()
