@@ -26,6 +26,14 @@ sg_polyorder = 3
 
 analysis_points = {}
 
+cursor_a = None
+cursor_b = None
+cursor_a_line = None
+cursor_b_line = None
+cursor_text = None
+last_x = None
+last_y = None
+
 app = pg.mkQApp()
 
 # Configure Qt GUI:
