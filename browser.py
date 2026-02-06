@@ -393,7 +393,7 @@ def replot():
                     first_deriv_plot.plot(
                         t_ms,
                         calcium_data["ca"],
-                        pen=pg.mkPen('m', width=2.5),
+                        pen=pg.mkPen('b', width=2),
                         name="Ca (subtracted)"
                     )
 
