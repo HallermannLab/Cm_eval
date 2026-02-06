@@ -116,9 +116,6 @@ def setup_plots_with_derivatives():
     plot_widget.ci.layout.setRowStretchFactor(0, 50)
     plot_widget.ci.layout.setRowStretchFactor(1, 50)
 
-    # Link x-axes for synchronized scrolling
-    first_deriv_plot.setXLink(voltage_plot)
-
 def setup_plots_with_calcium():
     """
     Current trace layout with leak subtraction (for Imon-1, trace_id=0):
