@@ -255,6 +255,32 @@ def update_tree(root_item, index):
     for i in range(len(node.children)):
         update_tree(item, index + [i])
 
+def update_cursor_text():
+    global cursor_text
+    global cursor_a, cursor_b
+
+    if cursor_a is None or cursor_b is None:
+        return
+
+    xA, yA = cursor_a.getData()
+    xB, yB = cursor_b.getData()
+
+    if len(xA) == 0 or len(xB) == 0:
+        return
+
+    xA = xA[0]
+    yA = yA[0]
+    xB = xB[0]
+    yB = yB[0]
+
+    txt = (
+        f"A: {xA:.3f} ms, {yA:.2f} pA\n"
+        f"B: {xB:.3f} ms, {yB:.2f} pA\n"
+        f"Δt: {abs(xB - xA):.3f} ms\n"
+        f"ΔI: {abs(yB - yA):.2f} pA"
+    )
+
+    cursor_text.setText(txt)
 
 def replot():
     """Update plot and data tree when user selects a trace."""
