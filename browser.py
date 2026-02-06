@@ -384,7 +384,7 @@ def replot():
                     first_deriv_plot.plot(
                         t_ms,
                         calcium_data["leak"],
-                        pen=pg.mkPen('b', width=1.5),
+                        pen=pg.mkPen((100, 180, 255), width=2),
                         name="Leak (P/4)"
                     )
 
