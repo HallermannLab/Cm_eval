@@ -521,6 +521,110 @@ def replot():
             voltage_plot.plot(time, data, pen='k', name='Trace')
 
 
+def add_cursors(plot):
+    global cursor_a, cursor_b
+    global cursor_a_line, cursor_b_line
+    global cursor_text
+
+    # Remove old items
+    for item in (
+        cursor_a, cursor_b,
+        cursor_a_line, cursor_b_line,
+        cursor_text
+    ):
+        if item is not None:
+            plot.removeItem(item)
+
+    xmin = np.min(last_x)
+    xmax = np.max(last_x)
+
+    # Draggable invisible lines
+    cursor_a_line = pg.InfiniteLine(
+        angle=90,
+        movable=True,
+        bounds=(xmin, xmax),
+        pen=None
+    )
+
+    cursor_b_line = pg.InfiniteLine(
+        angle=90,
+        movable=True,
+        bounds=(xmin, xmax),
+        pen=None
+    )
+
+    # Visible dots
+    cursor_a = pg.ScatterPlotItem(
+        size=12,
+        brush=pg.mkBrush(50, 50, 220),
+        pen=pg.mkPen('b', width=2)
+    )
+
+    cursor_b = pg.ScatterPlotItem(
+        size=12,
+        brush=pg.mkBrush(50, 50, 220),
+        pen=pg.mkPen('b', width=2)
+    )
+
+    # Info panel
+    cursor_text = pg.TextItem(
+        anchor=(1, 1),
+        color='k',
+        fill=pg.mkBrush(255, 255, 255, 200)
+    )
+
+    cursor_text.setFlag(cursor_text.ItemIsMovable, True)
+    cursor_text.setFlag(cursor_text.ItemIsSelectable, True)
+
+    # Add items
+    plot.addItem(cursor_a_line)
+    plot.addItem(cursor_b_line)
+
+    plot.addItem(cursor_a)
+    plot.addItem(cursor_b)
+
+    plot.addItem(cursor_text)
+
+    # Initial text position (top-right)
+    vb = plot.getViewBox()
+    rect = vb.viewRect()
+
+    cursor_text.setPos(rect.right(), rect.top())
+
+    # Connect movement
+    cursor_a_line.sigPositionChanged.connect(update_cursors)
+    cursor_b_line.sigPositionChanged.connect(update_cursors)
+
+def update_cursors():
+    global cursor_a, cursor_b
+    global cursor_a_line, cursor_b_line
+
+    if cursor_a_line is None or cursor_b_line is None:
+        return
+
+    if last_x is None or last_y is None:
+        return
+
+    # Cursor A
+    xA = cursor_a_line.value()
+    iA = np.argmin(np.abs(last_x - xA))
+
+    xA = last_x[iA]
+    yA = last_y[iA]
+
+    # Cursor B
+    xB = cursor_b_line.value()
+    iB = np.argmin(np.abs(last_x - xB))
+
+    xB = last_x[iB]
+    yB = last_y[iB]
+
+    # Move dots
+    cursor_a.setData([xA], [yA])
+    cursor_b.setData([xB], [yB])
+
+    update_cursor_text()
+
 tree.itemSelectionChanged.connect(replot)
 
 if __name__ == '__main__':
