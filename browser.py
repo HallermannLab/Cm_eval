@@ -375,8 +375,8 @@ def replot():
                     first_deriv_plot.plot(
                         t_ms,
                         calcium_data["raw"],
-                        pen=pg.mkPen('gray', width=1.5, style=QtCore.Qt.DashLine),
-                        name="APS raw"
+                        pen=pg.mkPen('gray', width=2, style=QtCore.Qt.DashLine),
+                        name="aps raw"
                     )
 
                 # Plot leak current
