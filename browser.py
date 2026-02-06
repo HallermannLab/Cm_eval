@@ -503,14 +503,12 @@ def replot():
                     name="2-exp"
                 )
 
-
-        else:
-            # Set up layout with voltage only (no analysis points available)
-            setup_plots_voltage_only()
-
-            # Set labels for voltage plot only
-            voltage_plot.setLabel('bottom', trace.XUnit)
-            voltage_plot.setLabel('left', 'Capacitance', units='pF')
+            else:
+                # No analysis points - just show raw Cm trace
+                setup_plots_voltage_only()
+                voltage_plot.setLabel('bottom', trace.XUnit)
+                voltage_plot.setLabel('left', 'Capacitance', units='pF')
+                voltage_plot.plot(time, F_to_pF * data, pen='m', name='Cm')
 
         # ========================================================================
         # CASE 3: Other traces (e.g., trace_id = 1 for voltage)
