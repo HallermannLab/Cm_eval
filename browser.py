@@ -390,6 +390,10 @@ def replot():
 
                 # Plot calcium current (subtracted)
                 if "ca" in calcium_data and len(calcium_data["ca"]) > 0:
+                    global last_x, last_y
+                    last_x = t_ms
+                    last_y = np.array(calcium_data["ca"])
+
                     first_deriv_plot.plot(
                         t_ms,
                         calcium_data["ca"],
