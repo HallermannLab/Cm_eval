@@ -397,6 +397,18 @@ def replot():
                         name="Ca (subtracted)"
                     )
 
+                    add_cursors(first_deriv_plot)
+
+                    # Initial positions
+                    i0 = 0
+                    i1 = len(t_ms) // 3
+
+                    cursor_a_line.setValue(t_ms[i0])
+                    cursor_b_line.setValue(t_ms[i1])
+
+                    update_cursors()
+                    update_cursor_text()
+
                 # Add RMS info if available
                 if "rms" in calcium_data:
                     rms_text = f"RMS: {calcium_data['rms']:.2f} pA"
