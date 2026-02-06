@@ -1017,12 +1017,18 @@ def analyze_aps_with_leak_subtraction(
         # Store
         # =====================================================
 
-        results = {
-            f"{trace_name}_leak_raw": i_aps_win,
-            f"{trace_name}_leak_leak": i_leak_win,
-            f"{trace_name}_leak_ca": i_ca,
-            f"{trace_name}_leak_time": t,
-            f"{trace_name}_leak_rms": rms
+        trace_dict = analysis_points[file_name][group_id][aps_series_id][0][0]
+
+        if not isinstance(trace_dict, dict):
+            analysis_points[file_name][group_id][aps_series_id][0][0] = {}
+            trace_dict = analysis_points[file_name][group_id][aps_series_id][0][0]
+
+        trace_dict["calcium_leak"] = {
+            "time": t.tolist(),
+            "raw": i_aps_win.tolist(),
+            "leak": i_leak_win.tolist(),
+            "ca": i_ca.tolist(),
+            "rms": float(rms),
         }
 
 
