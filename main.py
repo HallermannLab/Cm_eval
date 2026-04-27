@@ -1137,12 +1137,14 @@ def plot_combined_group_analysis(
         plt.savefig(os.path.join(output_folder_results, f"capacitance_{group_name}.pdf"), dpi=300)
         plt.close(fig)
 
-            # Interpolate all traces to common time base
-            interpolated_traces = []
-            for trace, time_array in zip(traces, time_arrays):
-                if len(trace) > 0 and len(time_array) > 0:
-                    interpolated_trace = np.interp(reference_time, time_array, trace)
-                    interpolated_traces.append(interpolated_trace)
+    # ==================================================================
+    # PDF 2 — CALCIUM CURRENTS
+    # Row 0: APS leak-subtracted  ← NEU: zuerst
+    # Row 1: sine_3ms_1
+    # Row 2: sine_3ms_2
+    # ==================================================================
+    for group_name in groups_to_process:
+        print(f"Creating calcium PDF for group: {group_name}")
 
             if not interpolated_traces:
                 for col in range(3):
