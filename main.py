@@ -1039,8 +1039,10 @@ def plot_combined_group_analysis(
     aps_avg_traces_group = aps_avg_traces_group or {}
     aps_avg_times_group  = aps_avg_times_group  or {}
 
-    Creates one PDF per group (including "all").
-    """
+    aps_leak_all         = aps_leak_all         or []
+    aps_leak_times_all   = aps_leak_times_all   or []
+    aps_leak_group       = aps_leak_group       or {}
+    aps_leak_times_group = aps_leak_times_group or {}
 
     # Define groups to process (all + individual groups)
     groups_to_process = ["all"] + unique_groups
