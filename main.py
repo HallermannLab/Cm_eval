@@ -733,14 +733,7 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
             y0 = np.min(cm_bs[fit_mask])
             A0 = np.max(cm_bs[fit_mask]) - y0
             tau0 = tau1 if not np.isnan(tau1) else 5
-
-            popt, _ = curve_fit(
-                exp_funcY,
-                time_rel[fit_mask],
-                cm_bs[fit_mask],
-                p0=(A0, tau0, y0)
-            )
-
+            popt, _ = curve_fit(exp_funcY, time_rel[fit_mask], cm_bs[fit_mask], p0=(A0, tau0, y0))
             A2, tau2, y0 = popt
             fit2 = A2 * np.exp(-fit_plot_x / tau2) + y0
 
