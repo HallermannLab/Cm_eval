@@ -623,7 +623,7 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
             else:
                 ax(4).text(0.5, 0.5, "t0 or t1 not found",
                            ha='center', va='center', transform=ax(4).transAxes)
-                ax(4).set_title("Current Trace - No Timing")
+                ax(4).set_title("Calcium current – No Timing")
 
         # ======================================================
         # Export data for browser (same structure as CME)
