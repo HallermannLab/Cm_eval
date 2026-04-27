@@ -1024,7 +1024,10 @@ def plot_combined_group_analysis(
     aps_avg_traces_group=None,
     aps_avg_times_group=None,
 
-    return results
+    aps_leak_all=None,
+    aps_leak_times_all=None,
+    aps_leak_group=None,
+    aps_leak_times_group=None,
 
 def plot_combined_group_analysis(all_traces, group_traces, all_time_arrays, group_time_arrays,
                                  trace_types, unique_groups, output_folder_results):
