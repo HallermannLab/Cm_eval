@@ -360,12 +360,15 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
             current_mask = (i_trace_time >= current_plot_start) & (i_trace_time <= current_plot_end)
 
             if np.any(current_mask):
-                axs[axs_start_idx + 4].plot(i_trace_time[current_mask], i_trace[current_mask], 'c-', linewidth=1,
-                                            label="Current")
-                axs[axs_start_idx + 4].axvline(x=t0, color='r', linestyle='--', alpha=0.7, label="t0")
-                axs[axs_start_idx + 4].axvline(x=t1, color='g', linestyle='--', alpha=0.7, label="t1")
-                axs[axs_start_idx + 4].set_title("Current Trace")
-                axs[axs_start_idx + 4].legend()
+                ca_current_trace = i_trace[current_mask] - baseline_ca
+                ca_current_time  = i_trace_time[current_mask] - t0
+
+                axs[axs_start_idx + 4].plot(i_trace_time[current_mask], i_trace[current_mask] - baseline_ca,
+                                            'c-', linewidth=1, label="Ca current")
+                axs[axs_start_idx + 4].axvline(x=t0, color='r', linestyle='--', alpha=0.7, label=f"t0={t0*1e3:.1f} ms")
+                axs[axs_start_idx + 4].axvline(x=t1, color='g', linestyle='--', alpha=0.7, label=f"t1={t1*1e3:.1f} ms")
+                axs[axs_start_idx + 4].set_title("Calcium current")
+                axs[axs_start_idx + 4].legend(fontsize=8)
                 axs[axs_start_idx + 4].set_xlabel("Time (s)")
                 axs[axs_start_idx + 4].set_ylabel("Current (pA)")
                 axs[axs_start_idx + 4].grid(True, alpha=0.3)
