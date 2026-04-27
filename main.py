@@ -422,7 +422,9 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
             f'{trace_name}_2exp_aRel': np.nan,
             f'{trace_name}_2exp_tau2': np.nan,
             'cm_trace_baseline_subtracted': None,
-            'time_relative': None
+            'time_relative': None,
+            'ca_current_trace': None,
+            'ca_current_time':  None,
         }
 
     return results
