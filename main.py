@@ -886,10 +886,10 @@ def analyze_aps_with_leak_subtraction(
             )
         aps_baseline = np.mean(i_aps[pre_aps_mask])
 
-        # =====================================================
-        # Load apsl
-        # =====================================================
-
+        # --- pre-stimulus baseline per apsl-Sweep (before summing it!) ---
+        # every apsl-sweep has its own holding current (~1/4 des APS) so baseline is substracted
+        # from each sweep first and then summed up
+        #  wird einzeln subtrahiert, DANN summiert — so heben sich
         apsl_currents = []
 
         for sid in apsl_series_ids:
