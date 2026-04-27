@@ -893,6 +893,7 @@ def analyze_aps_with_leak_subtraction(
         apsl_currents = []
         for sweep_idx, sid in enumerate(apsl_series_ids):
             i = A_to_pA * bundle.data[group_id, sid, 0, 0]
+            t_apsl = np.arange(len(i)) * dt
 
             apsl_currents.append(i)
 
