@@ -956,7 +956,6 @@ def analyze_aps_with_leak_subtraction(
 
         # APS-baseline substraction
         i_aps_win = i_aps_win - aps_baseline
-        i_leak_win = i_leak_win - leak_baseline
 
         print(f"Pre-stim Baseline — APS:  {aps_baseline:+.2f} pA  "
               f"(Window: {pre_aps_start*1e3:.1f}–{pre_aps_end*1e3:.1f} ms, "
