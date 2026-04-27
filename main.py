@@ -1186,11 +1186,6 @@ def plot_combined_group_analysis(
         draw_row(axes[2], sine2_tr, sine2_t,
                  row_label="Sine 3 ms (#2 Stim) – Ca current", y_label="Current (pA)")
 
-            ax3.set_xlabel('Time (s)')
-            ax3.set_ylabel('Capacitance (pF)')
-            ax3.grid(True, alpha=0.3)
-
-        # Adjust layout and save
         plt.tight_layout()
         plt.savefig(os.path.join(output_folder_results, f"calcium_{group_name}.pdf"), dpi=300)
         plt.close(fig)
