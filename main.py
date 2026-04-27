@@ -259,7 +259,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         axs[axs_start_idx + 2].set_title("Baseline-subtracted + 1-expY fit")
         axs[axs_start_idx + 2].legend(fontsize=8)
         axs[axs_start_idx + 2].set_xlabel("Time (s)")
-        axs[axs_start_idx + 2].set_ylabel("pF")
+        axs[axs_start_idx + 2].set_ylabel("ΔCm (pF)")
 
         # ------------------------  2exp (double exponential)  -----------------------------------
         try:
