@@ -1164,11 +1164,13 @@ def plot_combined_group_analysis(
                  x_label="Time (ms)",
                  x_scale=1e3)
 
-            # Plot 2: Average ± parametric SEM
-            ax2 = axes[trace_idx, 1]
-            mean_trace = np.mean(interpolated_traces, axis=0)
-            sem_trace = np.std(interpolated_traces, axis=0) / np.sqrt(n_traces) if n_traces > 1 else np.zeros_like(
-                mean_trace)
+        # ---- Row 1: sine_3ms_1 Ca-Stromspur ----
+        if group_name == "all":
+            sine1_tr = all_ca_traces.get('sine_3ms_1', [])
+            sine1_t  = all_ca_times.get('sine_3ms_1', [])
+        else:
+            sine1_tr = group_ca_traces.get('sine_3ms_1', {}).get(group_name, [])
+            sine1_t  = group_ca_times.get('sine_3ms_1', {}).get(group_name, [])
 
             ax2.plot(reference_time, mean_trace, 'b-', linewidth=2, label=f'Mean (n={n_traces})')
             ax2.fill_between(reference_time, mean_trace - sem_trace, mean_trace + sem_trace,
