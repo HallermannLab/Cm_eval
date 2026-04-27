@@ -1123,7 +1123,7 @@ def plot_combined_group_analysis(
                  row_label="APS avg ΔCm", y_label="ΔCm (pF)")
 
         for trace_idx, trace_type in enumerate(trace_types):
-            # Get traces for this group and trace type
+            row = trace_idx + 1
             if group_name == "all":
                 traces = all_traces[trace_type]
                 time_arrays = all_time_arrays[trace_type]
