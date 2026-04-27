@@ -377,7 +377,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
                 ca_current_time  = None
                 axs[axs_start_idx + 4].text(0.5, 0.5, "No current data\nin time window",
                                             ha='center', va='center', transform=axs[axs_start_idx + 4].transAxes)
-                axs[axs_start_idx + 4].set_title("Current Trace - No Data")
+                axs[axs_start_idx + 4].set_title("Calcium current – No Data")
         else:
             axs[axs_start_idx + 4].text(0.5, 0.5, "t0 or t1 not found",
                                         ha='center', va='center', transform=axs[axs_start_idx + 4].transAxes)
