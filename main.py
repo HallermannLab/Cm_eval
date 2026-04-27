@@ -607,7 +607,6 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
                 current_plot_start = t0 - 0.002
                 current_plot_end = t1 + 0.002
                 current_mask = (i_trace_time >= current_plot_start) & (i_trace_time <= current_plot_end)
-
                 if np.any(current_mask):
                     ax(4).plot(i_trace_time[current_mask], i_trace[current_mask],
                                'c-', linewidth=1, label="Current")
