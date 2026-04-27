@@ -1410,8 +1410,7 @@ def Cm_eval():
                         cell_group = str(row['groups'])
                         if cell_group in group_traces[trace_type]:
                             group_traces[trace_type][cell_group].append(
-                                trace_results['cm_trace_baseline_subtracted']
-                            )
+                                trace_results['cm_trace_baseline_subtracted'])
                             group_time_relative[trace_type][cell_group].append(
                                 trace_results['time_relative']
                             )
