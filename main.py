@@ -1226,12 +1226,10 @@ def plot_group_analysis(traces, time_arrays, title, output_path):
         if interpolated_traces:
             interpolated_traces = np.array(interpolated_traces)
             mean_trace = np.mean(interpolated_traces, axis=0)
-            # Calculate SEM using numpy instead of scipy
-            sem_trace = np.std(interpolated_traces, axis=0) / np.sqrt(len(interpolated_traces)) if len(
-                interpolated_traces) > 1 else np.zeros_like(
-                mean_trace)
-
-            ax2.plot(reference_time, mean_trace, 'b-', linewidth=2, label=f'Mean (n={len(interpolated_traces)})')
+            sem_trace = (np.std(interpolated_traces, axis=0) / np.sqrt(len(interpolated_traces))
+                         if len(interpolated_traces) > 1 else np.zeros_like(mean_trace))
+            ax2.plot(reference_time, mean_trace, 'b-', linewidth=2,
+                     label=f'Mean (n={len(interpolated_traces)})')
             ax2.fill_between(reference_time, mean_trace - sem_trace, mean_trace + sem_trace,
                              alpha=0.3, color='blue', label='±SEM')
             ax2.legend()
