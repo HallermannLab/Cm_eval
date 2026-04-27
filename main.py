@@ -373,6 +373,8 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
                 axs[axs_start_idx + 4].set_ylabel("Current (pA)")
                 axs[axs_start_idx + 4].grid(True, alpha=0.3)
             else:
+                ca_current_trace = None
+                ca_current_time  = None
                 axs[axs_start_idx + 4].text(0.5, 0.5, "No current data\nin time window",
                                             ha='center', va='center', transform=axs[axs_start_idx + 4].transAxes)
                 axs[axs_start_idx + 4].set_title("Current Trace - No Data")
