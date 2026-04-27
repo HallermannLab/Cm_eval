@@ -1044,7 +1044,11 @@ def plot_combined_group_analysis(
     aps_leak_group       = aps_leak_group       or {}
     aps_leak_times_group = aps_leak_times_group or {}
 
-    # Define groups to process (all + individual groups)
+    all_ca_traces   = all_ca_traces   or {}
+    group_ca_traces = group_ca_traces or {}
+    all_ca_times    = all_ca_times    or {}
+    group_ca_times  = group_ca_times  or {}
+
     groups_to_process = ["all"] + unique_groups
 
     for group_name in groups_to_process:
