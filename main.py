@@ -895,7 +895,20 @@ def analyze_aps_with_leak_subtraction(
             i = A_to_pA * bundle.data[group_id, sid, 0, 0]
             t_apsl = np.arange(len(i)) * dt
 
-            apsl_currents.append(i)
+            pre_apsl_end   = apsl_t0 - 0.001
+            pre_apsl_start = max(0.0, pre_apsl_end - 0.050)
+            pre_apsl_mask  = (t_apsl >= pre_apsl_start) & (t_apsl <= pre_apsl_end)
+
+            if np.sum(pre_apsl_mask) == 0:
+                raise RuntimeError(
+                    f"No Pre-stimulus-baseline in apsl-sweep {sweep_idx} found"
+                    f"(searched: {pre_apsl_start:.4f}–{pre_apsl_end:.4f} s)."
+                )
+            apsl_bl = np.mean(i[pre_apsl_mask])
+            print(f"  apsl sweep {sweep_idx}: baseline = {apsl_bl:+.2f} pA  "
+                  f"(Window: {pre_apsl_start*1e3:.1f}–{pre_apsl_end*1e3:.1f} ms, "
+                  f"n={np.sum(pre_apsl_mask)} points)")
+            apsl_currents.append(i - apsl_bl)
 
         apsl_currents = np.array(apsl_currents)
 
