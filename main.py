@@ -812,15 +812,17 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
         delta_cm = float(np.max(cm_bs)) if len(cm_bs) > 0 else np.nan
 
         results = {
-            "A1": A1,
-            "tau1": tau1,
-            "A2": A2,
-            "tau2": tau2,
-            "y0": y0,
-            "A": A,
-            "tau_fast": tau_fast,
-            "tau_slow": tau_slow,
-            "aRel": aRel
+            "aps_avg_delta_cm":       delta_cm,
+            "aps_avg_ca_peak":        ca_peak,
+            "aps_avg_1exp_A":         A1,
+            "aps_avg_1exp_tau":       tau1,
+            "aps_avg_1expY_A":        A2,
+            "aps_avg_1expY_tau":      tau2,
+            "aps_avg_1expY_y0":       y0,
+            "aps_avg_2exp_A":         A,
+            "aps_avg_2exp_tau_fast":  tau_fast,
+            "aps_avg_2exp_aRel":      aRel,
+            "aps_avg_2exp_tau_slow":  tau_slow,
         }
 
     except Exception as e:
