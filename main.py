@@ -1396,7 +1396,8 @@ def Cm_eval():
 
                 cell_results.update({
                     k: v for k, v in trace_results.items()
-                    if k not in ['cm_trace_baseline_subtracted', 'time_relative']
+                    if k not in ['cm_trace_baseline_subtracted', 'time_relative',
+                                 'ca_current_trace', 'ca_current_time']
                 })
 
                 if trace_results['cm_trace_baseline_subtracted'] is not None:
