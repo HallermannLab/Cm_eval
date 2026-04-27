@@ -229,7 +229,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         fit_plot_y = A_fit * np.exp(-fit_plot_x / tau_fit) if not np.isnan(A_fit) else np.zeros_like(fit_plot_x)
         axs[axs_start_idx + 1].plot(time_relative, cm_trace_baseline_subtracted, label="Baseline-subtracted")
         if not np.isnan(A_fit):
-            axs[axs_start_idx + 1].plot(fit_plot_x, fit_plot_y, 'r--', label="Exponential fit")
+            axs[axs_start_idx + 1].plot(fit_plot_x, fit_plot_y, 'r--', label=f"1-exp fit\nA={A_fit:.2f} pF, τ={tau_fit:.2f} s")
         axs[axs_start_idx + 1].set_title("Baseline-subtracted + 1-exp fit")
         axs[axs_start_idx + 1].legend(fontsize=8)
         axs[axs_start_idx + 1].set_xlabel("Time (s)")
