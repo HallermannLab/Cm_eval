@@ -345,7 +345,8 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
 
         axs[axs_start_idx + 3].plot(time_relative, cm_trace_baseline_subtracted, label="Baseline-subtracted")
         if not np.isnan(A_fit_2exp):
-            axs[axs_start_idx + 3].plot(fit_plot_x, fit_plot_y_2exp, 'm--', label="2-Exp fit")
+            axs[axs_start_idx + 3].plot(fit_plot_x, fit_plot_y_2exp, 'm--',
+                                        label=f"2-exp fit\nA={A_fit_2exp:.2f} pF\nτ1={tau1_fit_2exp:.2f} s, τ2={tau2_fit_2exp:.2f} s\naRel={aRel_fit_2exp:.2f}")
         axs[axs_start_idx + 3].set_title("Baseline-subtracted + 2-exp fit")
         axs[axs_start_idx + 3].legend()
         axs[axs_start_idx + 3].set_xlabel("Time (s)")
