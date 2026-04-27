@@ -1107,12 +1107,20 @@ def plot_combined_group_analysis(
         print(f"Creating capacitance PDF for group: {group_name}")
 
         n_trace_types = len(trace_types)
-        fig, axes = plt.subplots(
-            n_trace_types,
-            3,
-            figsize=(18, 5 * n_trace_types)
-        )
-        fig.suptitle(f"Combined Analysis - {group_name.title()}", fontsize=16)
+        total_rows = n_trace_types + 1
+
+        fig, axes = plt.subplots(total_rows, 3, figsize=(18, 5 * total_rows))
+        fig.suptitle(f"Capacitance Analysis – {group_name}", fontsize=16, fontweight='bold')
+
+        if group_name == "all":
+            traces = aps_avg_traces_all
+            times  = aps_avg_times_all
+        else:
+            traces = aps_avg_traces_group.get(group_name, [])
+            times  = aps_avg_times_group.get(group_name, [])
+
+        draw_row(axes[0], traces, times,
+                 row_label="APS avg ΔCm", y_label="ΔCm (pF)")
 
         for trace_idx, trace_type in enumerate(trace_types):
             # Get traces for this group and trace type
