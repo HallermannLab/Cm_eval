@@ -1657,7 +1657,22 @@ def Cm_eval():
         all_traces, group_traces,
         all_time_relative, group_time_relative,
         trace_types, unique_groups,
-        output_folder_results
+        output_folder_results,
+
+        aps_avg_traces_all=aps_avg_traces_all,
+        aps_avg_times_all=aps_avg_times_all,
+        aps_avg_traces_group=aps_avg_traces_group,
+        aps_avg_times_group=aps_avg_times_group,
+
+        aps_leak_all=aps_leak_all,
+        aps_leak_times_all=aps_leak_times_all,
+        aps_leak_group=aps_leak_group,
+        aps_leak_times_group=aps_leak_times_group,
+
+        all_ca_traces=all_ca_traces,
+        group_ca_traces=group_ca_traces,
+        all_ca_times=all_ca_times,
+        group_ca_times=group_ca_times,
     )
 
     # ==========================================================================================
