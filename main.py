@@ -1192,15 +1192,6 @@ def plot_combined_group_analysis(
 
 
 def plot_group_analysis(traces, time_arrays, title, output_path):
-    """
-    Generate group analysis plots for multiple traces.
-
-    Parameters:
-    - traces: List of trace arrays
-    - time_arrays: List of corresponding time arrays
-    - title: Title for the plots
-    - output_path: Path to save the PDF output
-    """
     if not traces or len(traces) == 0:
         print(f"Warning: No traces provided for {title}")
         return
