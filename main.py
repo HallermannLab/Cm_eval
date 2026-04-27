@@ -1688,12 +1688,8 @@ def Cm_eval():
 
     # ======================================================
     # Save analysis points for browser
-    # ======================================================
-
-    analysis_points_path = os.path.join(
-        config.IMPORT_FOLDER,
-        "analysis_points.json"
-    )
+    # =========================================================================
+    analysis_points_path = os.path.join(config.IMPORT_FOLDER, "analysis_points.json")
     with open(analysis_points_path, "w") as f:
         json.dump(analysis_points, f, indent=2)
 
