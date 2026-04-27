@@ -305,8 +305,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
 
         # ---- 1-expY fit ----
         if not np.isnan(A_fit_y):
-            fit2_vals = fit_plot_y_expY.tolist()
-            fit2_points = list(zip(fit_times, fit2_vals))
+            fit2_points = list(zip(fit_times, fit_plot_y_expY.tolist()))
         else:
             fit2_points = []
 
