@@ -1244,7 +1244,8 @@ def plot_group_analysis(traces, time_arrays, title, output_path):
     if traces:
         peak_values = [np.max(np.abs(trace)) for trace in traces if len(trace) > 0]
         if peak_values:
-            ax3.hist(peak_values, bins=min(10, len(peak_values)), alpha=0.7, color='orange', label='Peak Amplitudes')
+            ax3.hist(peak_values, bins=min(10, len(peak_values)), alpha=0.7, color='orange',
+                     label='Peak Amplitudes')
             ax3.set_xlabel('Peak Amplitude (pA)')
             ax3.set_ylabel('Count')
             ax3.set_title('Peak Amplitude Distribution')
