@@ -1242,15 +1242,7 @@ def plot_group_analysis(traces, time_arrays, title, output_path):
     # Plot 3: Statistics summary
     ax3 = axes[2]
     if traces:
-        # Calculate some basic statistics
-        peak_values = []
-        baseline_values = []
-
-        for trace in traces:
-            if len(trace) > 0:
-                peak_values.append(np.max(np.abs(trace)))
-                baseline_values.append(np.mean(trace[:min(100, len(trace))]))  # First 100 points as baseline
-
+        peak_values = [np.max(np.abs(trace)) for trace in traces if len(trace) > 0]
         if peak_values:
             ax3.hist(peak_values, bins=min(10, len(peak_values)), alpha=0.7, color='orange', label='Peak Amplitudes')
             ax3.set_xlabel('Peak Amplitude (pA)')
