@@ -348,7 +348,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
             axs[axs_start_idx + 3].plot(fit_plot_x, fit_plot_y_2exp, 'm--',
                                         label=f"2-exp fit\nA={A_fit_2exp:.2f} pF\nτ1={tau1_fit_2exp:.2f} s, τ2={tau2_fit_2exp:.2f} s\naRel={aRel_fit_2exp:.2f}")
         axs[axs_start_idx + 3].set_title("Baseline-subtracted + 2-exp fit")
-        axs[axs_start_idx + 3].legend()
+        axs[axs_start_idx + 3].legend(fontsize=8)
         axs[axs_start_idx + 3].set_xlabel("Time (s)")
         axs[axs_start_idx + 3].set_ylabel("pF")
 
