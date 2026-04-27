@@ -874,6 +874,17 @@ def analyze_aps_with_leak_subtraction(
 
         t_aps = np.arange(len(i_aps)) * dt
 
+        # --- pre-stimulus baseline before aps, 5 ms window (endet 1 ms vor stim)  ---
+        pre_aps_end   = aps_t0 - 0.001
+        pre_aps_start = max(0.0, pre_aps_end - 0.005)
+        pre_aps_mask  = (t_aps >= pre_aps_start) & (t_aps <= pre_aps_end)
+        if np.sum(pre_aps_mask) == 0:
+            raise RuntimeError(
+                f"Found no pre-stimulus-baseline "
+                f"(searched: {pre_aps_start:.4f}–{pre_aps_end:.4f} s). "
+                f"trace starts at t={t_aps[0]:.4f} s."
+            )
+        aps_baseline = np.mean(i_aps[pre_aps_mask])
 
         # =====================================================
         # Load apsl
