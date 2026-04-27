@@ -290,11 +290,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
 
         # ---- Baseline (linear fit) ----
         baseline_times = [time[0], time[-1]]
-        baseline_vals = [
-            baseline_fit_line[0],
-            baseline_fit_line[-1]
-        ]
-
+        baseline_vals = [baseline_fit_line[0], baseline_fit_line[-1]]
         baseline_points = list(zip(baseline_times, baseline_vals))
 
         # ---- Common time axis for fits ----
