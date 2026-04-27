@@ -1680,6 +1680,8 @@ def Cm_eval():
     # ==========================================================================================
 
     results_df = pd.DataFrame(results)
+    if 'groups' in results_df.columns:
+        results_df = results_df.sort_values('groups', kind='stable').reset_index(drop=True)
     excel_output_path = os.path.join(output_folder_results, "results.xlsx")
     results_df.to_excel(excel_output_path, index=False)
 
