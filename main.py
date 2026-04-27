@@ -711,13 +711,8 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
 
         # ---------- 1-exp ----------
         try:
-            popt, _ = curve_fit(
-                exp_func,
-                time_rel[fit_mask],
-                cm_bs[fit_mask],
-                p0=(np.max(cm_bs), 5),
-                bounds=([0, 0], [np.inf, np.inf])
-            )
+            popt, _ = curve_fit(exp_func, time_rel[fit_mask], cm_bs[fit_mask],
+                                p0=(np.max(cm_bs), 5), bounds=([0, 0], [np.inf, np.inf]))
             A1, tau1 = popt
             fit1 = A1 * np.exp(-fit_plot_x / tau1)
         except:
