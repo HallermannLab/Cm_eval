@@ -1641,6 +1641,18 @@ def Cm_eval():
             interp    = [np.interp(ref_t, t, y) for y, t in zip(cell_leak_traces, cell_leak_times)]
             cell_mean = np.mean(np.array(interp), axis=0)
 
+            aps_leak_all.append(cell_mean)
+            aps_leak_times_all.append(ref_t)
+
+            if 'groups' in metadata_df.columns and pd.notna(row.get('groups')):
+                cell_group = str(row['groups'])
+                if cell_group in aps_leak_group:
+                    aps_leak_group[cell_group].append(cell_mean)
+                    aps_leak_times_group[cell_group].append(ref_t)
+
+    # =========================================================================
+    # Group-level summary PDFs
+    # =========================================================================
     plot_combined_group_analysis(
         all_traces, group_traces,
         all_time_relative, group_time_relative,
