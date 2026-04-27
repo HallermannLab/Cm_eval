@@ -608,12 +608,11 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
                 current_plot_end = t1 + 0.002
                 current_mask = (i_trace_time >= current_plot_start) & (i_trace_time <= current_plot_end)
                 if np.any(current_mask):
-                    ax(4).plot(i_trace_time[current_mask], i_trace[current_mask],
-                               'c-', linewidth=1, label="Current")
-                    ax(4).axvline(x=t0, color='r', linestyle='--', alpha=0.7, label="t0")
-                    ax(4).axvline(x=t1, color='g', linestyle='--', alpha=0.7, label="t1")
-                    ax(4).set_title("Current Trace")
-                    ax(4).legend()
+                    ax(4).plot(i_trace_time[current_mask], i_trace[current_mask], 'c-', linewidth=1, label="Ca current")
+                    ax(4).axvline(x=t0, color='r', linestyle='--', alpha=0.7, label=f"t0={t0*1e3:.1f} ms")
+                    ax(4).axvline(x=t1, color='g', linestyle='--', alpha=0.7, label=f"t1={t1*1e3:.1f} ms")
+                    ax(4).set_title("Calcium current")
+                    ax(4).legend(fontsize=8)
                     ax(4).set_xlabel("Time (s)")
                     ax(4).set_ylabel("Current (pA)")
                     ax(4).grid(True, alpha=0.3)
