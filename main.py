@@ -741,7 +741,7 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
             A2, tau2, y0 = np.nan, np.nan, np.nan
             fit2 = np.zeros_like(fit_plot_x)
 
-        axs[axs_start_idx + 2].plot(time_rel, cm_bs, label="Avg")
+        axs[axs_start_idx + 2].plot(time_rel, cm_bs, label="Cm average")
         if not np.isnan(A2):
             axs[axs_start_idx + 2].plot(fit_plot_x, fit2, 'g--', label="1-expY")
 
