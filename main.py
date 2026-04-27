@@ -756,15 +756,9 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
             tau_fast0 = tau1 if not np.isnan(tau1) else 5
             aRel0 = 0.5
             tau_slow0 = tau_fast0 * 10
-
-            popt, _ = curve_fit(
-                exp_func2,
-                time_rel[fit_mask],
-                cm_bs[fit_mask],
-                p0=(A0, tau_fast0, aRel0, tau_slow0),
-                bounds=([0, 0, 0, 0], [np.inf, np.inf, 1, np.inf])
-            )
-
+            popt, _ = curve_fit(exp_func2, time_rel[fit_mask], cm_bs[fit_mask],
+                                p0=(A0, tau_fast0, aRel0, tau_slow0),
+                                bounds=([0, 0, 0, 0], [np.inf, np.inf, 1, np.inf]))
             A, tau_fast, aRel, tau_slow = popt
 
             fit3 = (
