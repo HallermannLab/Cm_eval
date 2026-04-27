@@ -400,7 +400,9 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
             f'{trace_name}_2exp_aRel': aRel_fit_2exp,
             f'{trace_name}_2exp_tau2': tau2_fit_2exp,
             'cm_trace_baseline_subtracted': cm_trace_baseline_subtracted,
-            'time_relative': time_relative
+            'time_relative': time_relative,
+            'ca_current_trace': ca_current_trace,
+            'ca_current_time':  ca_current_time,
         }
 
     except Exception as e:
