@@ -779,8 +779,37 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
         ax_leak = axs[axs_start_idx + 4]
         ca_peak = np.nan
 
-        # ---------- Column 5: Empty ----------
-        axs[axs_start_idx + 4].axis("off")
+        if leak_traces and len(leak_traces) > 0:
+            ref_t = leak_times[0]
+            interp_traces = [np.interp(ref_t, t, y) for y, t in zip(leak_traces, leak_times)]
+            interp_arr = np.array(interp_traces)
+            n = len(interp_arr)
+
+            mean_leak = np.mean(interp_arr, axis=0)
+            sem_leak = np.std(interp_arr, axis=0) / np.sqrt(n) if n > 1 else np.zeros_like(mean_leak)
+
+            # Ca peak = minimum of the mean trace (current deflects downward)
+            ca_peak = float(np.min(mean_leak))
+
+            for y, t in zip(leak_traces, leak_times):
+                ax_leak.plot(t * 1e3, y, color='gray', alpha=0.3, linewidth=0.8)
+            ax_leak.plot(ref_t * 1e3, mean_leak, color='magenta', linewidth=2,
+                         label=f"Mean (n={n})")
+            ax_leak.fill_between(ref_t * 1e3, mean_leak - sem_leak, mean_leak + sem_leak,
+                                 color='magenta', alpha=0.3, label="±SEM")
+            ax_leak.set_title("Avg leak-subtracted Ca current")
+            ax_leak.set_xlabel("Time (ms)")
+            ax_leak.set_ylabel("Current (pA)")
+            ax_leak.legend(fontsize=8)
+            ax_leak.grid(True, alpha=0.3)
+        else:
+            ax_leak.text(0.5, 0.5, "No leak-subtracted\ncurrent data available",
+                         ha='center', va='center', transform=ax_leak.transAxes)
+            ax_leak.set_title("Avg leak-subtracted Ca current")
+            ax_leak.axis("on")
+
+        # ΔCm: peak of the average Cm trace after stimulus
+        delta_cm = float(np.max(cm_bs)) if len(cm_bs) > 0 else np.nan
 
         results = {
             "A1": A1,
