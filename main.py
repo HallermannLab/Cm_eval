@@ -254,7 +254,8 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
             A_fit_y) else np.zeros_like(fit_plot_x)
         axs[axs_start_idx + 2].plot(time_relative, cm_trace_baseline_subtracted, label="Baseline-subtracted")
         if not np.isnan(A_fit_y):
-            axs[axs_start_idx + 2].plot(fit_plot_x, fit_plot_y_expY, 'g--', label="1-ExpY fit")
+            axs[axs_start_idx + 2].plot(fit_plot_x, fit_plot_y_expY, 'g--',
+                                        label=f"1-expY fit\nA={A_fit_y:.2f} pF, τ={tau_fit_y:.2f} s, y0={y0_fit_y:.2f}")
         axs[axs_start_idx + 2].set_title("Baseline-subtracted + 1-expY fit")
         axs[axs_start_idx + 2].legend()
         axs[axs_start_idx + 2].set_xlabel("Time (s)")
