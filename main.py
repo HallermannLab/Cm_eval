@@ -912,13 +912,8 @@ def analyze_aps_with_leak_subtraction(
 
         apsl_currents = np.array(apsl_currents)
 
-
-        # =====================================================
-        # Build leak template (P/4 sum)
-        # =====================================================
-
-        leak_current = np.sum(apsl_currents, axis=0)
-
+        # Summed Leak: every sweep is baseline substracted already
+        leak_current = np.sum(apsl_currents, axis=0) # *1.8 scaling-factor to test leak current (remove hashtag)
         t_leak = np.arange(len(leak_current)) * dt
 
 
