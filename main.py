@@ -1196,7 +1196,6 @@ def plot_group_analysis(traces, time_arrays, title, output_path):
         print(f"Warning: No traces provided for {title}")
         return
 
-    # Create figure with subplots
     fig, axes = plt.subplots(2, 2, figsize=(12, 8))
     fig.suptitle(title, fontsize=14)
 
