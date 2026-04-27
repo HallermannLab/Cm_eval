@@ -854,11 +854,10 @@ def analyze_aps_with_leak_subtraction(
 
     print(f"\n=== Windowed Leak Subtraction: {trace_name} ===")
 
-    results = {}
-
-    # ----------------------------
-    # USER-DEFINED WINDOWS (s)
-    # ----------------------------
+    aps_t0 = 0.500005
+    aps_t1 = 0.505005
+    apsl_t0 = 0.005005
+    apsl_t1 = 0.010005
 
     aps_t0 = 0.50001
     aps_t1 = 0.505
