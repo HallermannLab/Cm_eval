@@ -1190,7 +1190,6 @@ def plot_combined_group_analysis(
         plt.savefig(os.path.join(output_folder_results, f"calcium_{group_name}.pdf"), dpi=300)
         plt.close(fig)
 
-        print(f"Combined analysis saved to: {output_path}")
 
 def plot_group_analysis(traces, time_arrays, title, output_path):
     """
