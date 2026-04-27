@@ -547,7 +547,7 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
             ax(1).set_title("Baseline-subtracted + 1-exp fit")
             ax(1).legend(fontsize=8)
             ax(1).set_xlabel("Time (s)")
-            ax(1).set_ylabel("pF")
+            ax(1).set_ylabel("ΔCm (pF)")
 
         # --- 1expY (same as CME) ---
         try:
