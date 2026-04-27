@@ -702,11 +702,12 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
         fit_mask = (time_rel >= fit_start) & (time_rel <= fit_end)
         fit_plot_x = time_rel[fit_mask]
 
-        # ---------- Column 1: Raw ----------
-        axs[axs_start_idx].plot(time_rel, cm_bs, color='magenta', linewidth=2, label="Average")
-        axs[axs_start_idx].set_title(trace_name)
-        axs[axs_start_idx].legend()
-        axs[axs_start_idx].set_ylabel("pF")
+        # ---------- Column 0: Raw average Cm ----------
+        axs[axs_start_idx].plot(time_rel, cm_bs, color='magenta', linewidth=2, label="Cm average")
+        axs[axs_start_idx].set_title(f"{trace_name} – ΔCm")
+        axs[axs_start_idx].legend(fontsize=8)
+        axs[axs_start_idx].set_xlabel("Time (s)")
+        axs[axs_start_idx].set_ylabel("ΔCm (pF)")
 
         # ---------- 1-exp ----------
         try:
