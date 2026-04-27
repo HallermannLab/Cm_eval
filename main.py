@@ -1029,13 +1029,15 @@ def plot_combined_group_analysis(
     aps_leak_group=None,
     aps_leak_times_group=None,
 
-def plot_combined_group_analysis(all_traces, group_traces, all_time_arrays, group_time_arrays,
-                                 trace_types, unique_groups, output_folder_results):
-    """
-    Generate combined group analysis plots with 3 plots per trace type:
-    - Superposition (individual traces)
-    - Average ± parametric SEM
-    - Median ± bootstrap SEM
+    all_ca_traces=None,
+    group_ca_traces=None,
+    all_ca_times=None,
+    group_ca_times=None,
+):
+    aps_avg_traces_all   = aps_avg_traces_all   or []
+    aps_avg_times_all    = aps_avg_times_all    or []
+    aps_avg_traces_group = aps_avg_traces_group or {}
+    aps_avg_times_group  = aps_avg_times_group  or {}
 
     Creates one PDF per group (including "all").
     """
