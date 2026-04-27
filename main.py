@@ -972,31 +972,9 @@ def analyze_aps_with_leak_subtraction(
         if axs is not None:
 
             ax = axs[axs_start_idx + 4]
-
-            ax.plot(
-                t * 1e3,
-                i_aps_win,
-                color="gray",
-                alpha=0.6,
-                label="aps raw"
-            )
-
-            ax.plot(
-                t * 1e3,
-                i_leak_win,
-                color="blue",
-                alpha=0.7,
-                label="Leak (P/4)"
-            )
-
-            ax.plot(
-                t * 1e3,
-                i_ca,
-                color="magenta",
-                linewidth=2,
-                label="Ca (subtracted)"
-            )
-
+            ax.plot(t * 1e3, i_aps_win,  color="gray",    alpha=0.6, label="aps raw")
+            ax.plot(t * 1e3, i_leak_win, color="blue",    alpha=0.7, label="Leak (P/4)")
+            ax.plot(t * 1e3, i_ca,       color="magenta", linewidth=2, label="Ca (subtracted)")
             ax.set_title(f"{trace_name} leak subtraction")
 
             ax.set_xlabel("Time (ms)")
