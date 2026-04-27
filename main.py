@@ -42,8 +42,8 @@ analysis_points = defaultdict(
 
 window_size_for_median_rolling_filter = 21  # must be odd (for symmetric filtering)
 
-# --- unified PDF page size (used for all pages) ---
-PDF_FIGSIZE = (25, 5 * 6)  # 6 trace types → must match page 1
+# --- unified PDF page size ---
+PDF_FIGSIZE = (25, 5 * 6)
 
 def exp_func(t, A, tau):
     return A * np.exp(-t / tau)
