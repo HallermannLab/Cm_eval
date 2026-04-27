@@ -1001,6 +1001,7 @@ def analyze_aps_with_leak_subtraction(
             "ca": i_ca.tolist(),
             "rms": float(rms),
         }
+        print(f"  ✅ Calcium leak data saved for {trace_name}")
 
 
     except Exception as e:
