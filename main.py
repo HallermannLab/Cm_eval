@@ -1321,10 +1321,15 @@ def Cm_eval():
         4: ['apsl_5_1_series', 'apsl_5_2_series', 'apsl_5_3_series', 'apsl_5_4_series'],
     }
 
-    all_traces = {trace_type: [] for trace_type in trace_types}
-    group_traces = {trace_type: {group: [] for group in unique_groups} for trace_type in trace_types}
-    all_time_relative = {trace_type: [] for trace_type in trace_types}
-    group_time_relative = {trace_type: {group: [] for group in unique_groups} for trace_type in trace_types}
+    all_traces           = {tt: [] for tt in trace_types}
+    group_traces         = {tt: {g: [] for g in unique_groups} for tt in trace_types}
+    all_time_relative    = {tt: [] for tt in trace_types}
+    group_time_relative  = {tt: {g: [] for g in unique_groups} for tt in trace_types}
+
+    aps_avg_traces_all   = []
+    aps_avg_times_all    = []
+    aps_avg_traces_group = {g: [] for g in unique_groups}
+    aps_avg_times_group  = {g: [] for g in unique_groups}
 
     # === GIT SAVE ===
     # Provide the current script path (only works in .py, not notebooks)
