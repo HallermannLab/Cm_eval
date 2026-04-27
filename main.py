@@ -1599,11 +1599,8 @@ def Cm_eval():
                 else:
                     for col in range(5):
                         ax = axs_aps[row_idx * 5 + col]
-                        ax.text(
-                            0.5, 0.5, f"APS {row_idx + 1} not available",
-                            ha="center", va="center",
-                            transform=ax.transAxes
-                        )
+                        ax.text(0.5, 0.5, f"aps {row_idx + 1} not available",
+                                ha="center", va="center", transform=ax.transAxes)
                         ax.set_axis_off()
 
             # --- Plot APS average (row 5) ---
