@@ -567,8 +567,7 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
             ax(2).plot(time_rel, cm_bs, label="Baseline-subtracted")
 
             if not np.isnan(A2):
-                ax(2).plot(fit_plot_x, fit2, 'g--', label="1-ExpY fit")
-
+                ax(2).plot(fit_plot_x, fit2, 'g--', label=f"1-expY\nA={A2:.2f} pF, τ={tau2:.2f} s, y0={y0:.2f}")
             ax(2).set_title("Baseline-subtracted + 1-expY fit")
             ax(2).legend()
             ax(2).set_xlabel("Time (s)")
