@@ -1173,7 +1173,7 @@ def plot_combined_group_analysis(
             sine1_t  = group_ca_times.get('sine_3ms_1', {}).get(group_name, [])
 
         draw_row(axes[1], sine1_tr, sine1_t,
-                 row_label="Sine 3 ms (1. Stim) – Ca-Strom", y_label="Current (pA)")
+                 row_label="Sine 3 ms (#1 Stim) – Ca current", y_label="Current (pA)")
 
         # ---- Row 2: sine_3ms_2 ----
         if group_name == "all":
