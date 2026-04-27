@@ -1609,7 +1609,7 @@ def Cm_eval():
                 # Plot the average
                 axs_start_idx = 5 * 5
                 time_rel = aps_avg_result['time_relative']
-                cm_bs = aps_avg_result['cm_trace_baseline_subtracted']
+                cm_bs    = aps_avg_result['cm_trace_baseline_subtracted']
 
                 aps_avg_table_results = analyze_aps_average(
                     time_rel, cm_bs,
