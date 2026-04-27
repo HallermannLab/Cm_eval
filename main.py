@@ -964,13 +964,7 @@ def analyze_aps_with_leak_subtraction(
 
         i_ca = i_aps_win - i_leak_win
 
-        # =====================================================
-        # Quality control (first 0.3 ms) sinnvoll?
-        # =====================================================
-
-        qc_end = int(0.0003 / dt)
-        qc_end = min(qc_end, n)
-
+        qc_end = min(int(0.0003 / dt), n)
         rms = np.std(i_ca[:qc_end])
 
         print(f"Residual RMS (0–0.3 ms): {rms:.2f} pA")
