@@ -597,7 +597,7 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
                 ax(3).plot(fit_plot_x, fit3, 'm--',
                            label=f"2-exp\nA={A:.2f} pF\nτ1={tau_fast:.2f} s, τ2={tau_slow:.2f} s\naRel={aRel:.2f}")
             ax(3).set_title("Baseline-subtracted + 2-exp fit")
-            ax(3).legend()
+            ax(3).legend(fontsize=8)
             ax(3).set_xlabel("Time (s)")
             ax(3).set_ylabel("pF")
 
