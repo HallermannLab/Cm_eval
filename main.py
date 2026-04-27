@@ -771,7 +771,13 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
             axs[axs_start_idx + 3].plot(fit_plot_x, fit3, 'm--',
                                         label=f"2-exp\nA={A:.2f} pF\nτ1={tau_fast:.2f} s, τ2={tau_slow:.2f} s\naRel={aRel:.2f}")
         axs[axs_start_idx + 3].set_title("2-exp fit")
-        axs[axs_start_idx + 3].legend()
+        axs[axs_start_idx + 3].legend(fontsize=8)
+        axs[axs_start_idx + 3].set_xlabel("Time (s)")
+        axs[axs_start_idx + 3].set_ylabel("ΔCm (pF)")
+
+        # ---------- Column 4: average leak-subtracted Ca current ----------
+        ax_leak = axs[axs_start_idx + 4]
+        ca_peak = np.nan
 
         # ---------- Column 5: Empty ----------
         axs[axs_start_idx + 4].axis("off")
