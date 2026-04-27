@@ -1146,11 +1146,9 @@ def plot_combined_group_analysis(
     for group_name in groups_to_process:
         print(f"Creating calcium PDF for group: {group_name}")
 
-            if not interpolated_traces:
-                for col in range(3):
-                    axes[trace_idx, col].text(0.5, 0.5, f"No valid data for {trace_type}",
-                                              ha='center', va='center', transform=axes[trace_idx, col].transAxes)
-                continue
+        total_rows = 3
+        fig, axes = plt.subplots(total_rows, 3, figsize=(18, 5 * total_rows))
+        fig.suptitle(f"Calcium Currents – {group_name}", fontsize=16, fontweight='bold')
 
             interpolated_traces = np.array(interpolated_traces)
             n_traces = len(interpolated_traces)
