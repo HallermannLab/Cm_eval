@@ -1222,10 +1222,7 @@ def plot_group_analysis(traces, time_arrays, title, output_path):
         interpolated_traces = []
         for trace, time_array in zip(traces, time_arrays):
             if len(trace) > 0 and len(time_array) > 0:
-                # Interpolate trace to reference time
-                interpolated_trace = np.interp(reference_time, time_array, trace)
-                interpolated_traces.append(interpolated_trace)
-
+                interpolated_traces.append(np.interp(reference_time, time_array, trace))
         if interpolated_traces:
             interpolated_traces = np.array(interpolated_traces)
             mean_trace = np.mean(interpolated_traces, axis=0)
