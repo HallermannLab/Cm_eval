@@ -760,12 +760,8 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
                                 p0=(A0, tau_fast0, aRel0, tau_slow0),
                                 bounds=([0, 0, 0, 0], [np.inf, np.inf, 1, np.inf]))
             A, tau_fast, aRel, tau_slow = popt
-
-            fit3 = (
-                A * (1 - aRel) * np.exp(-fit_plot_x / tau_fast) +
-                A * aRel * np.exp(-fit_plot_x / tau_slow)
-            )
-
+            fit3 = (A * (1 - aRel) * np.exp(-fit_plot_x / tau_fast)
+                    + A * aRel * np.exp(-fit_plot_x / tau_slow))
         except:
             A, tau_fast, aRel, tau_slow = np.nan, np.nan, np.nan, np.nan
             fit3 = np.zeros_like(fit_plot_x)
