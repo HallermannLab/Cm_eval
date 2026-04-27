@@ -1204,7 +1204,7 @@ def plot_group_analysis(traces, time_arrays, title, output_path):
 
     # Plot 1: Individual traces
     ax1 = axes[0]
-    for i, (trace, time_array) in enumerate(zip(traces, time_arrays)):
+    for trace, time_array in zip(traces, time_arrays):
         if len(trace) > 0 and len(time_array) > 0:
             ax1.plot(time_array, trace, alpha=0.3, color='gray', linewidth=0.5)
     ax1.set_xlabel('Time (s)')
