@@ -969,11 +969,6 @@ def analyze_aps_with_leak_subtraction(
 
         print(f"Residual RMS (0–0.3 ms): {rms:.2f} pA")
 
-
-        # =====================================================
-        # Plot (column 5)
-        # =====================================================
-
         if axs is not None:
 
             ax = axs[axs_start_idx + 4]
