@@ -1404,8 +1404,7 @@ def Cm_eval():
                     all_traces[trace_type].append(
                         np.asarray(trace_results['cm_trace_baseline_subtracted'], dtype=float))
                     all_time_relative[trace_type].append(
-                        np.asarray(trace_results['time_relative'], dtype=float)
-                    )
+                        np.asarray(trace_results['time_relative'], dtype=float))
 
                     if 'groups' in metadata_df.columns and pd.notna(row['groups']):
                         cell_group = str(row['groups'])
