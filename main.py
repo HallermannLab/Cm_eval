@@ -743,8 +743,8 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
 
         axs[axs_start_idx + 2].plot(time_rel, cm_bs, label="Cm average")
         if not np.isnan(A2):
-            axs[axs_start_idx + 2].plot(fit_plot_x, fit2, 'g--', label="1-expY")
-
+            axs[axs_start_idx + 2].plot(fit_plot_x, fit2, 'g--',
+                                        label=f"1-expY\nA={A2:.2f} pF, τ={tau2:.2f} s, y0={y0:.2f}")
         axs[axs_start_idx + 2].set_title("1-expY fit")
         axs[axs_start_idx + 2].legend()
 
