@@ -1126,7 +1126,7 @@ def plot_combined_group_analysis(
             row = trace_idx + 1
             if group_name == "all":
                 traces = all_traces[trace_type]
-                time_arrays = all_time_arrays[trace_type]
+                times  = all_time_arrays[trace_type]
             else:
                 traces = group_traces[trace_type].get(group_name, [])
                 time_arrays = group_time_arrays[trace_type].get(group_name, [])
