@@ -1003,6 +1003,8 @@ def analyze_aps_with_leak_subtraction(
         }
         print(f"  ✅ Calcium leak data saved for {trace_name}")
 
+        ca_time    = t
+        ca_current = i_ca
 
     except Exception as e:
 
