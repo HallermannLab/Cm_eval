@@ -1499,6 +1499,9 @@ def Cm_eval():
         # --- SAVE PER-CELL PDF WITH 2 PAGES (CME + APS) ---
         # ======================================================================================
 
+                aps_avg_traces_all.append(aps_avg_cm_bs)
+                aps_avg_times_all.append(aps_avg_time_rel)
+
                 if 'groups' in metadata_df.columns and pd.notna(row.get('groups')):
                     cell_group = str(row['groups'])
                     if cell_group in aps_avg_traces_group:
