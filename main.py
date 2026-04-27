@@ -1172,14 +1172,8 @@ def plot_combined_group_analysis(
             sine1_tr = group_ca_traces.get('sine_3ms_1', {}).get(group_name, [])
             sine1_t  = group_ca_times.get('sine_3ms_1', {}).get(group_name, [])
 
-            ax2.plot(reference_time, mean_trace, 'b-', linewidth=2, label=f'Mean (n={n_traces})')
-            ax2.fill_between(reference_time, mean_trace - sem_trace, mean_trace + sem_trace,
-                             alpha=0.3, color='blue', label='±SEM')
-            ax2.set_title(f"{trace_type} - Average ± SEM")
-            ax2.set_xlabel('Time (s)')
-            ax2.set_ylabel('Capacitance (pF)')
-            ax2.legend()
-            ax2.grid(True, alpha=0.3)
+        draw_row(axes[1], sine1_tr, sine1_t,
+                 row_label="Sine 3 ms (1. Stim) – Ca-Strom", y_label="Current (pA)")
 
             # Plot 3: Median ± bootstrap SEM
             ax3 = axes[trace_idx, 2]
