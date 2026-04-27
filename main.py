@@ -1010,13 +1010,19 @@ def analyze_aps_with_leak_subtraction(
 
         print(f"❌ Leak subtraction failed: {e}")
 
-        results = {
-            f"{trace_name}_leak_raw": None,
-            f"{trace_name}_leak_leak": None,
-            f"{trace_name}_leak_ca": None,
-            f"{trace_name}_leak_time": None,
-            f"{trace_name}_leak_rms": None
-        }
+    return ca_time, ca_current
+
+
+def plot_combined_group_analysis(
+    all_traces, group_traces,
+    all_time_arrays, group_time_arrays,
+    trace_types, unique_groups,
+    output_folder_results,
+
+    aps_avg_traces_all=None,
+    aps_avg_times_all=None,
+    aps_avg_traces_group=None,
+    aps_avg_times_group=None,
 
     return results
 
