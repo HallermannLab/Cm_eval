@@ -429,8 +429,6 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
 
     return results
 
-def analyze_aps_trace(cm_trace, v_trace, time, axs, axs_start_idx, trace_name, file_name, group_id, series_id):
-
 def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, file_name):
     """
     APS analysis: baseline subtraction, median filter, fits
