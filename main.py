@@ -231,7 +231,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         if not np.isnan(A_fit):
             axs[axs_start_idx + 1].plot(fit_plot_x, fit_plot_y, 'r--', label="Exponential fit")
         axs[axs_start_idx + 1].set_title("Baseline-subtracted + 1-exp fit")
-        axs[axs_start_idx + 1].legend()
+        axs[axs_start_idx + 1].legend(fontsize=8)
         axs[axs_start_idx + 1].set_xlabel("Time (s)")
         axs[axs_start_idx + 1].set_ylabel("ΔCm (pF)")
 
