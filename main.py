@@ -1402,8 +1402,7 @@ def Cm_eval():
 
                 if trace_results['cm_trace_baseline_subtracted'] is not None:
                     all_traces[trace_type].append(
-                        np.asarray(trace_results['cm_trace_baseline_subtracted'], dtype=float)
-                    )
+                        np.asarray(trace_results['cm_trace_baseline_subtracted'], dtype=float))
                     all_time_relative[trace_type].append(
                         np.asarray(trace_results['time_relative'], dtype=float)
                     )
