@@ -954,19 +954,7 @@ def analyze_aps_with_leak_subtraction(
 
         t = t_aps_win - t_aps_win[0]
 
-        # =====================================================
-        # Baseline subtraction (bc of baseline drift)
-        # =====================================================
-
-        # Use first 0.2 ms for baseline
-        bl_dur = 0.0002  # 0.2 ms
-        bl_pts = int(bl_dur / dt)
-        bl_pts = min(bl_pts, n)
-
-        aps_baseline = np.mean(i_aps_win[:bl_pts])
-        leak_baseline = np.mean(i_leak_win[:bl_pts])
-
-        # Subtract
+        # APS-baseline substraction
         i_aps_win = i_aps_win - aps_baseline
         i_leak_win = i_leak_win - leak_baseline
 
