@@ -1133,8 +1133,9 @@ def plot_combined_group_analysis(
             draw_row(axes[row], traces, times,
                      row_label=trace_type, y_label="ΔCm (pF)")
 
-            # Find common time base (use the first trace's time array as reference)
-            reference_time = time_arrays[0] if time_arrays else np.linspace(0, 1, 1000)
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_folder_results, f"capacitance_{group_name}.pdf"), dpi=300)
+        plt.close(fig)
 
             # Interpolate all traces to common time base
             interpolated_traces = []
