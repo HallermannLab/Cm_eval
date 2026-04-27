@@ -1503,6 +1503,15 @@ def Cm_eval():
         # --- SAVE PER-CELL PDF WITH 2 PAGES (CME + APS) ---
         # ======================================================================================
 
+                if 'groups' in metadata_df.columns and pd.notna(row.get('groups')):
+                    cell_group = str(row['groups'])
+                    if cell_group in aps_avg_traces_group:
+                        aps_avg_traces_group[cell_group].append(aps_avg_cm_bs)
+                        aps_avg_times_group[cell_group].append(aps_avg_time_rel)
+
+        # =========================================================================
+        # Page 2 PDF (APS)
+        # =========================================================================
         pdf_path = os.path.join(
             output_folder_individual_experiments,
             f"{file_name.replace('.dat', '')}.pdf"
