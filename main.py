@@ -891,9 +891,7 @@ def analyze_aps_with_leak_subtraction(
         # from each sweep first and then summed up
         #  wird einzeln subtrahiert, DANN summiert — so heben sich
         apsl_currents = []
-
-        for sid in apsl_series_ids:
-
+        for sweep_idx, sid in enumerate(apsl_series_ids):
             i = A_to_pA * bundle.data[group_id, sid, 0, 0]
 
             apsl_currents.append(i)
