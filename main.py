@@ -1158,15 +1158,11 @@ def plot_combined_group_analysis(
             leak_tr = aps_leak_group.get(group_name, [])
             leak_t  = aps_leak_times_group.get(group_name, [])
 
-            # Plot 1: Superposition (Individual traces)
-            ax1 = axes[trace_idx, 0]
-            for i, (trace, time_array) in enumerate(zip(traces, time_arrays)):
-                if len(trace) > 0 and len(time_array) > 0:
-                    ax1.plot(time_array, trace, alpha=0.3, color='gray', linewidth=0.5)
-            ax1.set_title(f"{trace_type} - Superposition (n={n_traces})")
-            ax1.set_xlabel('Time (s)')
-            ax1.set_ylabel('Capacitance (pF)')
-            ax1.grid(True, alpha=0.3)
+        draw_row(axes[0], leak_tr, leak_t,
+                 row_label="Leak-subtracted Ca current (APS)",
+                 y_label="Current (pA)",
+                 x_label="Time (ms)",
+                 x_scale=1e3)
 
             # Plot 2: Average ± parametric SEM
             ax2 = axes[trace_idx, 1]
