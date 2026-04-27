@@ -1331,8 +1331,17 @@ def Cm_eval():
     aps_avg_traces_group = {g: [] for g in unique_groups}
     aps_avg_times_group  = {g: [] for g in unique_groups}
 
-    # === GIT SAVE ===
-    # Provide the current script path (only works in .py, not notebooks)
+    aps_leak_all         = []
+    aps_leak_times_all   = []
+    aps_leak_group       = {g: [] for g in unique_groups}
+    aps_leak_times_group = {g: [] for g in unique_groups}
+
+    ca_trace_types       = ['sine_3ms_1', 'sine_3ms_2']
+    all_ca_traces        = {tt: [] for tt in ca_trace_types}
+    group_ca_traces      = {tt: {g: [] for g in unique_groups} for tt in ca_trace_types}
+    all_ca_times         = {tt: [] for tt in ca_trace_types}
+    group_ca_times       = {tt: {g: [] for g in unique_groups} for tt in ca_trace_types}
+
     script_path = __file__ if '__file__' in globals() else None
     myGit.save_git_info(output_folder_used_data_and_code, script_path)
 
