@@ -1371,6 +1371,7 @@ def Cm_eval():
         cell_results = {
             "cell_count": cell_count + 1,
             "file_name": file_name,
+            "group": cell_group,
         }
 
         # ==========================================================================================
