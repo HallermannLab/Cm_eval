@@ -1175,10 +1175,13 @@ def plot_combined_group_analysis(
         draw_row(axes[1], sine1_tr, sine1_t,
                  row_label="Sine 3 ms (1. Stim) – Ca-Strom", y_label="Current (pA)")
 
-            # Plot 3: Median ± bootstrap SEM
-            ax3 = axes[trace_idx, 2]
-            try:
-                median_trace, bootstrap_sem = bootstrap_median_trace(interpolated_traces, n_boot=1000, random_state=42)
+        # ---- Row 2: sine_3ms_2 ----
+        if group_name == "all":
+            sine2_tr = all_ca_traces.get('sine_3ms_2', [])
+            sine2_t  = all_ca_times.get('sine_3ms_2', [])
+        else:
+            sine2_tr = group_ca_traces.get('sine_3ms_2', {}).get(group_name, [])
+            sine2_t  = group_ca_times.get('sine_3ms_2', {}).get(group_name, [])
 
                 ax3.plot(reference_time, median_trace, 'r-', linewidth=2, label=f'Median (n={n_traces})')
                 ax3.fill_between(reference_time, median_trace - bootstrap_sem, median_trace + bootstrap_sem,
