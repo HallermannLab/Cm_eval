@@ -1406,7 +1406,7 @@ def Cm_eval():
                     all_time_relative[trace_type].append(
                         np.asarray(trace_results['time_relative'], dtype=float))
 
-                    if 'groups' in metadata_df.columns and pd.notna(row['groups']):
+                    if 'groups' in metadata_df.columns and pd.notna(row.get('groups')):
                         cell_group = str(row['groups'])
                         if cell_group in group_traces[trace_type]:
                             group_traces[trace_type][cell_group].append(
