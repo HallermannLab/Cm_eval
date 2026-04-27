@@ -1051,6 +1051,58 @@ def plot_combined_group_analysis(
 
     groups_to_process = ["all"] + unique_groups
 
+    def prepare(traces, times):
+        if len(traces) == 0:
+            return None, None
+        ref = times[0]
+        interp = [np.interp(ref, t, y) for y, t in zip(traces, times)]
+        return np.array(interp), ref
+
+    def draw_row(axes_row, traces, times, row_label, y_label, x_label="Time (s)", x_scale=1.0):
+        Y, t = prepare(traces, times)
+        n = 0 if Y is None else len(Y)
+
+        ax = axes_row[0]
+        if Y is not None:
+            for y, tt in zip(traces, times):
+                ax.plot(tt * x_scale, y, alpha=0.3, color='gray', linewidth=0.8)
+        ax.set_title(f"{row_label} – superposition (n={n})")
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
+        ax.grid(True, alpha=0.3)
+
+        ax = axes_row[1]
+        if Y is not None and n > 0:
+            mean = np.mean(Y, axis=0)
+            sem  = np.std(Y, axis=0) / np.sqrt(n) if n > 1 else np.zeros_like(mean)
+            ax.plot(t * x_scale, mean, color='royalblue', linewidth=2, label=f"Mean (n={n})")
+            ax.fill_between(t * x_scale, mean - sem, mean + sem,
+                            color='royalblue', alpha=0.3, label="±SEM")
+            ax.legend(fontsize=8)
+        else:
+            ax.text(0.5, 0.5, "No data", ha='center', va='center', transform=ax.transAxes)
+        ax.set_title(f"{row_label} – mean ± SEM")
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
+        ax.grid(True, alpha=0.3)
+
+        ax = axes_row[2]
+        if Y is not None and n > 0:
+            med, bsem = bootstrap_median_trace(Y)
+            ax.plot(t * x_scale, med, color='darkorange', linewidth=2, label=f"Median (n={n})")
+            ax.fill_between(t * x_scale, med - bsem, med + bsem,
+                            color='darkorange', alpha=0.3, label="±Bootstrap SEM")
+            ax.legend(fontsize=8)
+        else:
+            ax.text(0.5, 0.5, "No data", ha='center', va='center', transform=ax.transAxes)
+        ax.set_title(f"{row_label} – median ± bootstrap SEM")
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
+        ax.grid(True, alpha=0.3)
+
+    # ==================================================================
+    # PDF 1 — CAPACITANCE
+    # ==================================================================
     for group_name in groups_to_process:
         print(f"Creating combined analysis for group: {group_name}")
 
