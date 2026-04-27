@@ -683,7 +683,9 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
 
     return results
 
-def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Average"):
+
+def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Average",
+                        leak_traces=None, leak_times=None):
     """
     Fit and plot APS average trace
     (same logic as analyze_aps_trace, but works on pre-averaged data)
