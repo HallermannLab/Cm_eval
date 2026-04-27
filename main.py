@@ -1367,7 +1367,7 @@ def Cm_eval():
 
         group_id = 0
 
-        # Initialize result dictionary for this cell
+        cell_group = str(row['groups']) if ('groups' in metadata_df.columns and pd.notna(row.get('groups'))) else np.nan
         cell_results = {
             "cell_count": cell_count + 1,
             "file_name": file_name,
