@@ -1362,11 +1362,7 @@ def Cm_eval():
 
         # --- Create new figure 1 for this cell (with CME data) ---
         n_trace_types = len(trace_types)
-        fig, axs = plt.subplots(
-            n_trace_types,
-            5,
-            figsize=(25, 5 * n_trace_types)
-        )
+        fig, axs = plt.subplots(n_trace_types, 5, figsize=(25, 5 * n_trace_types))
         axs = axs.flatten()
 
         group_id = 0
