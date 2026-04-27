@@ -1631,9 +1631,15 @@ def Cm_eval():
 
         print(f"Saved 2-page PDF: {pdf_path}")
 
-    # ==========================================================================================
-    # --- Group Analysis After the Loop ---
-    # ==========================================================================================
+        # NEU: APS average Ergebnisse in results-Zeile eintragen
+        if aps_avg_table_results:
+            results[-1].update(aps_avg_table_results)
+
+        # ---- Collect per-cell leak-subtracted Ca for group-level PDFs ----
+        if len(cell_leak_traces) > 0:
+            ref_t     = cell_leak_times[0]
+            interp    = [np.interp(ref_t, t, y) for y, t in zip(cell_leak_traces, cell_leak_times)]
+            cell_mean = np.mean(np.array(interp), axis=0)
 
     plot_combined_group_analysis(
         all_traces, group_traces,
