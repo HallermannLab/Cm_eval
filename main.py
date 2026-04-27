@@ -844,14 +844,8 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
     return results
 
 def analyze_aps_with_leak_subtraction(
-    bundle,
-    group_id,
-    aps_series_id,
-    apsl_series_ids,
-    trace_name,
-    axs_start_idx,
-    axs,
-    file_name
+    bundle, group_id, aps_series_id, apsl_series_ids,
+    trace_name, axs_start_idx, axs, file_name
 ):
     """
     Window-based P/4 leak subtraction
