@@ -1192,8 +1192,7 @@ def plot_combined_group_analysis(
 
         # Adjust layout and save
         plt.tight_layout()
-        output_path = os.path.join(output_folder_results, f"combined_analysis_{group_name}.pdf")
-        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        plt.savefig(os.path.join(output_folder_results, f"calcium_{group_name}.pdf"), dpi=300)
         plt.close(fig)
 
         print(f"Combined analysis saved to: {output_path}")
