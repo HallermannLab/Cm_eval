@@ -599,7 +599,7 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
             ax(3).set_title("Baseline-subtracted + 2-exp fit")
             ax(3).legend(fontsize=8)
             ax(3).set_xlabel("Time (s)")
-            ax(3).set_ylabel("pF")
+            ax(3).set_ylabel("ΔCm (pF)")
 
         # ---------- column 5: Current trace ----------
         if do_plot:
