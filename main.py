@@ -859,12 +859,8 @@ def analyze_aps_with_leak_subtraction(
     apsl_t0 = 0.005005
     apsl_t1 = 0.010005
 
-    aps_t0 = 0.50001
-    aps_t1 = 0.505
-
-    apsl_t0 = 0.00501
-    apsl_t1 = 0.01
-
+    ca_time = None
+    ca_current = None
 
     try:
 
