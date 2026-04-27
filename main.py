@@ -1603,7 +1603,8 @@ def Cm_eval():
                                 ha="center", va="center", transform=ax.transAxes)
                         ax.set_axis_off()
 
-            # --- Plot APS average (row 5) ---
+            # ---- APS average row (row 5) ----
+            aps_avg_table_results = {}
             if aps_avg_result is not None:
                 # Plot the average
                 axs_start_idx = 5 * 5
