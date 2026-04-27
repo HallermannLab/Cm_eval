@@ -1183,15 +1183,8 @@ def plot_combined_group_analysis(
             sine2_tr = group_ca_traces.get('sine_3ms_2', {}).get(group_name, [])
             sine2_t  = group_ca_times.get('sine_3ms_2', {}).get(group_name, [])
 
-                ax3.plot(reference_time, median_trace, 'r-', linewidth=2, label=f'Median (n={n_traces})')
-                ax3.fill_between(reference_time, median_trace - bootstrap_sem, median_trace + bootstrap_sem,
-                                 alpha=0.3, color='red', label='±Bootstrap SEM')
-                ax3.set_title(f"{trace_type} - Median ± Bootstrap SEM")
-                ax3.legend()
-            except Exception as e:
-                ax3.text(0.5, 0.5, f"Bootstrap failed: {str(e)}",
-                         ha='center', va='center', transform=ax3.transAxes)
-                ax3.set_title(f"{trace_type} - Bootstrap Failed")
+        draw_row(axes[2], sine2_tr, sine2_t,
+                 row_label="Sine 3 ms (#2 Stim) – Ca current", y_label="Current (pA)")
 
             ax3.set_xlabel('Time (s)')
             ax3.set_ylabel('Capacitance (pF)')
