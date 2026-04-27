@@ -1255,12 +1255,7 @@ def plot_group_analysis(traces, time_arrays, title, output_path):
     # Plot 4: Time course analysis
     ax4 = axes[3]
     if traces:
-        # Plot peak values over trace index (time course)
-        peak_values = []
-        for trace in traces:
-            if len(trace) > 0:
-                peak_values.append(np.max(np.abs(trace)))
-
+        peak_values = [np.max(np.abs(trace)) for trace in traces if len(trace) > 0]
         if peak_values:
             ax4.plot(range(len(peak_values)), peak_values, 'ro-', markersize=4, linewidth=1)
             ax4.set_xlabel('Trace Number')
