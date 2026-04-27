@@ -554,13 +554,8 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
             initial_y0 = np.min(cm_bs[fit_mask])
             initial_A = np.max(cm_bs[fit_mask]) - initial_y0
             initial_tau = tau1 if not np.isnan(tau1) else 5
-
-            popt, _ = curve_fit(
-                exp_funcY,
-                time_rel[fit_mask],
-                cm_bs[fit_mask],
-                p0=(initial_A, initial_tau, initial_y0)
-            )
+            popt, _ = curve_fit(exp_funcY, time_rel[fit_mask], cm_bs[fit_mask],
+                                p0=(initial_A, initial_tau, initial_y0))
             A2, tau2, y0 = popt
             fit2 = A2 * np.exp(-fit_plot_x / tau2) + y0
         except Exception as e:
