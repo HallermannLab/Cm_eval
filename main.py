@@ -583,10 +583,8 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
                                 p0=(initial_A, initial_tau1, initial_aRel, initial_tau2),
                                 bounds=([0, 0, 0, 0], [np.inf, np.inf, 1, np.inf]))
             A, tau_fast, aRel, tau_slow = popt
-            fit3 = (
-                    A * (1 - aRel) * np.exp(-fit_plot_x / tau_fast)
-                    + A * aRel * np.exp(-fit_plot_x / tau_slow)
-            )
+            fit3 = (A * (1 - aRel) * np.exp(-fit_plot_x / tau_fast)
+                    + A * aRel * np.exp(-fit_plot_x / tau_slow))
         except Exception as e:
             print(f"        2-exp fit failed for {trace_name} for {file_name}: {e}")
             A, tau_fast, aRel, tau_slow = np.nan, np.nan, np.nan, np.nan
