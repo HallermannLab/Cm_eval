@@ -192,7 +192,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         axs[axs_start_idx].plot(time, baseline_fit_line, label="Baseline fit", linestyle="--")
         axs[axs_start_idx].set_title(trace_name)
         axs[axs_start_idx].legend()
-        axs[axs_start_idx].set_ylabel("pF")
+        axs[axs_start_idx].set_ylabel("Cm (pF)")
 
         # ------------------ Ca trace analysis -----------------------
         baseline_ca_mask = (i_trace_time >= trace_base_st) & (i_trace_time <= trace_base_end)
