@@ -1580,8 +1580,7 @@ def Cm_eval():
                     print(f"\naps {row_idx + 1}: found {len(apsl_ids)} apsl traces")
 
                     if len(apsl_ids) > 0:
-
-                        analyze_aps_with_leak_subtraction(
+                        ca_time, ca_current = analyze_aps_with_leak_subtraction(
                             bundle=bundle,
                             group_id=group_id,
                             aps_series_id=series_id_for_plot,
