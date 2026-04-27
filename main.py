@@ -1538,7 +1538,9 @@ def Cm_eval():
 
             axs_aps = axs_aps.flatten()
 
-            # --- Plot individual APS (rows 0–4) ---
+            cell_leak_traces = []
+            cell_leak_times  = []
+
             for row_idx in range(5):
                 # Find if we have data for this APS
                 aps_data = None
