@@ -350,7 +350,7 @@ def analyze_trace(bundle, group_id, series_id, trace_name, axs_start_idx, axs, f
         axs[axs_start_idx + 3].set_title("Baseline-subtracted + 2-exp fit")
         axs[axs_start_idx + 3].legend(fontsize=8)
         axs[axs_start_idx + 3].set_xlabel("Time (s)")
-        axs[axs_start_idx + 3].set_ylabel("pF")
+        axs[axs_start_idx + 3].set_ylabel("ΔCm (pF)")
 
         # ------------------------  Current trace (5th plot)  -----------------------------------
         # Plot current trace from t0-0.002 to t1+0.002
