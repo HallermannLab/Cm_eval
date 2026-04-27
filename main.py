@@ -1415,6 +1415,20 @@ def Cm_eval():
                                 trace_results['time_relative']
                             )
 
+                if trace_type in ca_trace_types:
+                    if trace_results.get('ca_current_trace') is not None:
+                        all_ca_traces[trace_type].append(
+                            np.asarray(trace_results['ca_current_trace'], dtype=float))
+                        all_ca_times[trace_type].append(
+                            np.asarray(trace_results['ca_current_time'], dtype=float))
+
+                        if 'groups' in metadata_df.columns and pd.notna(row.get('groups')):
+                            cell_group = str(row['groups'])
+                            if cell_group in group_ca_traces[trace_type]:
+                                group_ca_traces[trace_type][cell_group].append(
+                                    trace_results['ca_current_trace'])
+                                group_ca_times[trace_type][cell_group].append(
+                                    trace_results['ca_current_time'])
             else:
                 print(f"        Skipping {trace_type}")
                 for i in range(5):
