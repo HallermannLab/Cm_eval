@@ -1456,8 +1456,8 @@ def Cm_eval():
 
             print(f"Analyzing {trace_name}")
 
-                apsl_series_id = int(float(row[apsl_col])) - 1
-                trace_id = 2  # current trace
+            apsl_series_id = int(float(row[apsl_col])) - 1
+            trace_id = 2  # current trace
 
             aps_result = analyze_aps_trace(
                 bundle, group_id, aps_series_id,
