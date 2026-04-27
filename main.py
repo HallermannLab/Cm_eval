@@ -768,8 +768,8 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
 
         axs[axs_start_idx + 3].plot(time_rel, cm_bs, label="Cm average")
         if not np.isnan(A):
-            axs[axs_start_idx + 3].plot(fit_plot_x, fit3, 'm--', label="2-exp")
-
+            axs[axs_start_idx + 3].plot(fit_plot_x, fit3, 'm--',
+                                        label=f"2-exp\nA={A:.2f} pF\nτ1={tau_fast:.2f} s, τ2={tau_slow:.2f} s\naRel={aRel:.2f}")
         axs[axs_start_idx + 3].set_title("2-exp fit")
         axs[axs_start_idx + 3].legend()
 
