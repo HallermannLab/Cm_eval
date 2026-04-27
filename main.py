@@ -724,7 +724,9 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
             axs[axs_start_idx + 1].plot(fit_plot_x, fit1, 'r--',
                                         label=f"1-exp\nA={A1:.2f} pF, τ={tau1:.2f} s")
         axs[axs_start_idx + 1].set_title("1-exp fit")
-        axs[axs_start_idx + 1].legend()
+        axs[axs_start_idx + 1].legend(fontsize=8)
+        axs[axs_start_idx + 1].set_xlabel("Time (s)")
+        axs[axs_start_idx + 1].set_ylabel("ΔCm (pF)")
 
         # ---------- 1-expY ----------
         try:
