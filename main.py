@@ -1129,15 +1129,9 @@ def plot_combined_group_analysis(
                 times  = all_time_arrays[trace_type]
             else:
                 traces = group_traces[trace_type].get(group_name, [])
-                time_arrays = group_time_arrays[trace_type].get(group_name, [])
-
-            # Skip if no traces available
-            if not traces or len(traces) == 0:
-                for col in range(3):
-                    axes[trace_idx, col].text(0.5, 0.5, f"No data for {trace_type}",
-                                              ha='center', va='center', transform=axes[trace_idx, col].transAxes)
-                    axes[trace_idx, col].set_title(f"{trace_type} - No Data")
-                continue
+                times  = group_time_arrays[trace_type].get(group_name, [])
+            draw_row(axes[row], traces, times,
+                     row_label=trace_type, y_label="ΔCm (pF)")
 
             # Find common time base (use the first trace's time array as reference)
             reference_time = time_arrays[0] if time_arrays else np.linspace(0, 1, 1000)
