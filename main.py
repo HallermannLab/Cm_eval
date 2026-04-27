@@ -1150,8 +1150,13 @@ def plot_combined_group_analysis(
         fig, axes = plt.subplots(total_rows, 3, figsize=(18, 5 * total_rows))
         fig.suptitle(f"Calcium Currents – {group_name}", fontsize=16, fontweight='bold')
 
-            interpolated_traces = np.array(interpolated_traces)
-            n_traces = len(interpolated_traces)
+        # ---- Row 0: APS leak-subtracted Ca current ----
+        if group_name == "all":
+            leak_tr = aps_leak_all
+            leak_t  = aps_leak_times_all
+        else:
+            leak_tr = aps_leak_group.get(group_name, [])
+            leak_t  = aps_leak_times_group.get(group_name, [])
 
             # Plot 1: Superposition (Individual traces)
             ax1 = axes[trace_idx, 0]
