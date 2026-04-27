@@ -522,7 +522,8 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
             axs[axs_start_idx].plot(time, cm_trace, label="Original")
             axs[axs_start_idx].plot(time, baseline_fit_line, '--', label="Baseline fit")
             axs[axs_start_idx].set_title(trace_name)
-            axs[axs_start_idx].legend()
+            axs[axs_start_idx].legend(fontsize=8)
+            axs[axs_start_idx].set_ylabel("Cm (pF)")
 
         # ---------- fits ----------
         fit_plot_x = time_rel[fit_mask]
