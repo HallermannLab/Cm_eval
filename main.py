@@ -530,13 +530,8 @@ def analyze_aps_trace(bundle, group_id, series_id, trace_name, axs_start_idx, ax
 
         # --- 1exp (same as CME) ---
         try:
-            popt, _ = curve_fit(
-                exp_func,
-                time_rel[fit_mask],
-                cm_bs[fit_mask],
-                p0=(np.max(cm_bs), 5),
-                bounds=([0, 0], [np.inf, np.inf])
-            )
+            popt, _ = curve_fit(exp_func, time_rel[fit_mask], cm_bs[fit_mask],
+                                p0=(np.max(cm_bs), 5), bounds=([0, 0], [np.inf, np.inf]))
             A1, tau1 = popt
             fit1 = A1 * np.exp(-fit_plot_x / tau1)
         except Exception as e:
