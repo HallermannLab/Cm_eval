@@ -827,6 +827,19 @@ def analyze_aps_average(time_rel, cm_bs, axs_start_idx, axs, trace_name="aps Ave
 
     except Exception as e:
         print("APS average analysis failed:", e)
+        results = {
+            "aps_avg_delta_cm":       np.nan,
+            "aps_avg_ca_peak":        np.nan,
+            "aps_avg_1exp_A":         np.nan,
+            "aps_avg_1exp_tau":       np.nan,
+            "aps_avg_1expY_A":        np.nan,
+            "aps_avg_1expY_tau":      np.nan,
+            "aps_avg_1expY_y0":       np.nan,
+            "aps_avg_2exp_A":         np.nan,
+            "aps_avg_2exp_tau_fast":  np.nan,
+            "aps_avg_2exp_aRel":      np.nan,
+            "aps_avg_2exp_tau_slow":  np.nan,
+        }
 
     return results
 
