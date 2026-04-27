@@ -1590,7 +1590,9 @@ def Cm_eval():
                             axs=axs_aps,
                             file_name=file_name
                         )
-
+                        if ca_time is not None and ca_current is not None:
+                            cell_leak_traces.append(ca_current)
+                            cell_leak_times.append(ca_time)
                     else:
                         print(f"⚠️ No apsl traces for {trace_name}")
 
