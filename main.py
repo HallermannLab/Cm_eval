@@ -1104,7 +1104,7 @@ def plot_combined_group_analysis(
     # PDF 1 — CAPACITANCE
     # ==================================================================
     for group_name in groups_to_process:
-        print(f"Creating combined analysis for group: {group_name}")
+        print(f"Creating capacitance PDF for group: {group_name}")
 
         # Create figure with DYNAMIC rows (trace types) × 3 columns (plot types)
         n_trace_types = len(trace_types)
